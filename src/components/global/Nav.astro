@@ -1,8 +1,9 @@
 ---
 import Icon from "@/components/media/Icon.astro";
-import NavLink from "@/components/global/NavLink.astro";
-import logo from "@/assets/logo/logo.svg";
-import { SITE_NAME } from "@/consts.ts";
+import Button from "@/components/Button.astro";
+import Logo from "@/components/global/Logo.astro";
+import whatsapp from "@/assets/icons/whatsapp.svg";
+import { SITE_NAME, CONTACT, NAV_LINKS } from "@/consts.ts";
 
 interface Props {
   /** Set to `false` to omit the component. */
@@ -16,27 +17,64 @@ const { render = true, overlap = false } = Astro.props;
 
 {render && (
   <header class:list={["nav_wrap", overlap && "overlap"]}>
-    <div class="nav_inner">
-      <a class="nav_logo" href="/" aria-label={SITE_NAME}>
-        <Icon src={logo} variant="full-width" />
+    <div class="nav_inner theme-dark">
+      <a class="nav_logo" href="/" aria-label={`${SITE_NAME}, accueil`}>
+        <Logo />
       </a>
-      <button
-        class="nav_toggle"
-        type="button"
-        aria-label="Menu"
-        aria-expanded="false"
-        aria-controls="nav-menu"
-      >
-        <span class="nav_toggle_icon" />
-      </button>
-      <nav class="nav_menu" id="nav-menu" aria-label="Main">
-        <div class="nav_menu_inner">
-          <ul class="nav_links">
-            <NavLink href="/">Home</NavLink>
-            <NavLink href="/example-components">Example Components</NavLink>
-          </ul>
-        </div>
+      <nav class="nav_menu" id="nav-menu" aria-label="Navigation principale">
+        <ul class="nav_links">
+          {NAV_LINKS.map((link) => (
+            <li>
+              <a class="nav_link" href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))}
+          <li class="nav_mobile-only">
+            <a class="nav_link" href={CONTACT.whatsapp} rel="noopener">
+              Écrire sur WhatsApp
+            </a>
+          </li>
+          <li class="nav_mobile-only">
+            <a class="nav_link is-accent" href="/#audit">
+              Audit gratuit →
+            </a>
+          </li>
+        </ul>
       </nav>
+      <div class="nav_actions">
+        <a
+          class="nav_whatsapp"
+          href={CONTACT.whatsapp}
+          rel="noopener"
+          aria-label="Nous écrire sur WhatsApp"
+        >
+          <Icon src={whatsapp} variant="medium" />
+          <span class="nav_whatsapp_text">WhatsApp</span>
+        </a>
+        <Button
+          element="link"
+          href="/#audit"
+          size="small"
+          arrow
+          class="nav_cta"
+        >
+          Audit gratuit
+        </Button>
+        <button
+          class="nav_toggle"
+          type="button"
+          aria-label="Menu"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+        >
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path class="nav_toggle_bar" d="M4 8h16" />
+            <path class="nav_toggle_bar" d="M4 16h10" />
+            <circle class="nav_toggle_dot" cx="19.5" cy="16" r="2" />
+          </svg>
+        </button>
+      </div>
     </div>
   </header>
 )}
@@ -46,13 +84,6 @@ const { render = true, overlap = false } = Astro.props;
   <style>
     .nav_toggle {
       display: none;
-    }
-    .nav_menu {
-      grid-template-rows: 1fr;
-      visibility: visible;
-    }
-    .nav_menu_inner {
-      opacity: 1;
     }
   </style>
 </noscript>
@@ -89,7 +120,7 @@ const { render = true, overlap = false } = Astro.props;
     });
 
     window
-      .matchMedia("(width >= 48rem)")
+      .matchMedia("(width >= 60rem)")
       .addEventListener("change", (event) => {
         if (event.matches) setOpen(false);
       });
@@ -99,196 +130,189 @@ const { render = true, overlap = false } = Astro.props;
 <style is:global>
   @layer components {
     .nav_wrap {
-      position: sticky;
-      top: 0;
+      position: relative;
       z-index: 100;
       display: flex;
       justify-content: center;
-      padding-inline: var(--site-margin);
-      background-color: var(--background);
-      color: var(--text);
-      border-bottom: var(--border-width) solid var(--border);
+      padding: 1rem var(--site-margin) 0;
+      background-color: var(--light-100);
 
       &.overlap {
-        position: fixed;
+        position: absolute;
         inset-inline: 0;
+        background-color: transparent;
       }
     }
 
     .nav_inner {
+      position: relative;
       width: 100%;
       max-width: var(--max-width-main);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0 var(--space-6);
-    }
-
-    /* Bar height */
-    .nav_logo,
-    .nav_toggle {
+      gap: 1rem;
       min-height: var(--nav-height);
+      padding: 0.625rem 0.625rem 0.625rem 1.375rem;
+      border-radius: var(--radius-small);
     }
 
     .nav_logo {
-      display: flex;
-      align-items: center;
-      width: 6.5rem;
-      transition: opacity var(--hover-duration) var(--hover-ease);
-      @media (hover: hover) {
-        &:hover {
-          opacity: 0.6;
-        }
-      }
-    }
-
-    .nav_toggle {
-      --_icon-width: 1.5rem;
-      --_bar-gap: 0.5rem;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-width: 2.75rem;
-      margin-right: calc((2.75rem - var(--_icon-width)) / -2);
-      color: inherit;
-      border-radius: var(--radius-small);
-      transition: opacity var(--hover-duration) var(--hover-ease);
-      @media (hover: hover) {
-        &:hover {
-          opacity: 0.6;
-        }
-      }
-    }
-
-    .nav_toggle_icon {
-      position: relative;
-      display: block;
-      width: var(--_icon-width);
-      height: calc(var(--_bar-gap) + var(--border-width));
-      &::before,
-      &::after {
-        content: "";
-        position: absolute;
-        inset-inline: 0;
-        height: var(--border-width);
-        background-color: currentcolor;
-        transition: transform var(--open-duration) var(--open-ease);
-      }
-      &::before {
-        top: 0;
-      }
-      &::after {
-        top: var(--_bar-gap);
-      }
-    }
-
-    .nav_wrap.open .nav_toggle_icon {
-      &::before {
-        transform: translateY(calc(var(--_bar-gap) / 2)) rotate(45deg);
-      }
-      &::after {
-        transform: translateY(calc(var(--_bar-gap) / -2)) rotate(-45deg);
-      }
-    }
-
-    .nav_menu {
-      position: absolute;
-      top: 100%;
-      inset-inline: 0;
-      display: grid;
-      grid-template-rows: 0fr;
-      visibility: hidden;
-      max-height: calc(100svh - var(--nav-height));
-      overflow-x: clip;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      background-color: var(--background);
-      border-bottom: var(--border-width) solid var(--border);
-      transition:
-        grid-template-rows var(--open-duration) var(--open-ease),
-        visibility var(--open-duration) var(--open-ease);
-    }
-
-    .nav_menu_inner {
-      overflow: hidden;
-      opacity: 0;
-      transition: opacity var(--open-duration) var(--open-ease);
-    }
-
-    .nav_wrap.open .nav_menu {
-      grid-template-rows: 1fr;
-      visibility: visible;
-    }
-
-    .nav_wrap.open .nav_menu_inner {
-      opacity: 1;
-      overflow-y: auto;
+      min-height: 2.75rem;
     }
 
     .nav_links {
       display: flex;
-      flex-direction: column;
-      padding: var(--space-2) var(--site-margin) var(--space-4);
-      font-size: var(--text-main);
+      align-items: center;
+      gap: 1.875rem;
+      font-size: 0.9375rem;
       font-weight: var(--primary-medium);
-      & > li + li {
-        border-top: var(--border-width) solid var(--border);
-      }
     }
 
     .nav_link {
-      display: block;
-      padding-block: var(--space-3);
-      color: color-mix(in lab, currentcolor 60%, transparent);
-      text-decoration: none;
-      text-underline-offset: 0.4em;
-      text-decoration-thickness: var(--border-width);
-      transition: color var(--hover-duration) var(--hover-ease);
+      color: var(--light-200);
+      opacity: 0.8;
+      transition:
+        opacity var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
       &[aria-current="page"] {
-        color: var(--text);
+        opacity: 1;
       }
       @media (hover: hover) {
         &:hover {
-          color: var(--text);
+          opacity: 1;
+          color: var(--brand-500);
         }
       }
     }
 
-    @media (width >= 48rem) {
+    .nav_mobile-only {
+      display: none;
+    }
+
+    .nav_actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav_whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 2.875rem;
+      padding: 0 0.875rem;
+      border-radius: var(--radius-button);
+      box-shadow: inset 0 0 0 0.0625rem
+        color-mix(in srgb, var(--light-200) 28%, transparent);
+      color: var(--light-200);
+      font-weight: var(--primary-medium);
+      font-size: 0.9375rem;
+      white-space: nowrap;
+      transition:
+        box-shadow var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
+      @media (hover: hover) {
+        &:hover {
+          box-shadow: inset 0 0 0 0.0625rem currentcolor;
+          color: var(--brand-500);
+        }
+      }
+    }
+
+    .nav_toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 2.875rem;
+      height: 2.875rem;
+      border-radius: var(--radius-button);
+      background-color: var(--brand-500);
+      & svg {
+        fill: none;
+        stroke: var(--dark-900);
+        stroke-width: 1.6;
+        stroke-linecap: square;
+      }
+      & .nav_toggle_dot {
+        fill: var(--coral-400);
+        stroke: none;
+      }
+    }
+
+    @media (width < 60rem) {
       .nav_toggle {
-        display: none;
+        display: inline-flex;
       }
 
       .nav_menu {
-        position: static;
-        display: block;
-        visibility: visible;
-        background-color: transparent;
-        border-bottom: 0;
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        z-index: 20;
+        width: min(86vw, 18.75rem);
+        padding: 0.5rem;
+        border-radius: var(--radius-small);
+        background-color: var(--dark-900);
+        visibility: hidden;
+        opacity: 0;
+        translate: 0 -0.5rem;
+        transition:
+          opacity var(--open-duration) var(--open-ease),
+          translate var(--open-duration) var(--open-ease),
+          visibility var(--open-duration) var(--open-ease);
       }
 
-      .nav_menu_inner {
-        overflow: visible;
+      .nav_wrap.open .nav_menu {
+        visibility: visible;
         opacity: 1;
+        translate: 0 0;
       }
 
       .nav_links {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        padding: 0;
-        gap: var(--space-4);
-        font-size: var(--text-small);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        font-size: 1.125rem;
         & > li + li {
-          border-top: 0;
+          border-top: var(--border-width) solid var(--border);
         }
       }
 
       .nav_link {
-        padding-block: 0;
-        &[aria-current="page"] {
-          text-decoration: underline;
+        display: block;
+        padding: 0.875rem;
+        opacity: 1;
+        &.is-accent {
+          color: var(--brand-500);
+          font-weight: var(--primary-semibold);
         }
+      }
+
+      .nav_mobile-only {
+        display: block;
+      }
+    }
+
+    @media (width < 32.5rem) {
+      .nav_cta {
+        display: none;
+      }
+
+      .nav_whatsapp {
+        width: 2.875rem;
+        padding: 0;
+        justify-content: center;
+      }
+
+      .nav_whatsapp_text {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
       }
     }
   }

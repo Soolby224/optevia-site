@@ -1,0 +1,62 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"span"> {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Color scheme: `light` on dark backgrounds, `dark` on light ones. */
+  variant?: "light" | "dark";
+}
+
+const { render = true, variant = "light", class: className, ...rest } =
+  Astro.props;
+---
+
+{render && (
+  <span class:list={["logo_wrap", variant, className]} {...rest}>
+    <svg class="logo_mark" viewBox="0 18 100 72" aria-hidden="true">
+      <path d="M7.02 70.8A43 43 0 0 1 14.52 47.71L31.85 59.57A22 22 0 0 0 28.01 71.39Z" />
+      <path d="M15.93 45.76A43 43 0 0 1 35.58 31.49L42.62 51.27A22 22 0 0 0 32.57 58.58Z" />
+      <path class="logo_key" d="M38.06 25.51A48 48 0 0 1 61.94 25.51L55.47 50.69A22 22 0 0 0 44.53 50.69Z" />
+      <path d="M64.42 31.49A43 43 0 0 1 84.07 45.76L67.43 58.58A22 22 0 0 0 57.38 51.27Z" />
+      <path d="M85.48 47.71A43 43 0 0 1 92.98 70.8L71.99 71.39A22 22 0 0 0 68.15 59.57Z" />
+      <rect x="7" y="76" width="21" height="7" />
+      <rect x="72" y="76" width="21" height="7" />
+    </svg>
+    <span class="logo_text">optevia</span>
+  </span>
+)}
+
+<style is:global>
+  @layer components {
+    .logo_wrap {
+      --_mark: var(--light-200);
+      --_key: var(--brand-500);
+      --_text: var(--brand-500);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      font-weight: var(--primary-semibold);
+      font-size: 1.625rem;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--_text);
+
+      &.dark {
+        --_mark: var(--dark-900);
+        --_key: var(--coral-500);
+        --_text: var(--dark-900);
+      }
+    }
+
+    .logo_mark {
+      flex: none;
+      width: 1.35em;
+      height: auto;
+      fill: var(--_mark);
+      & .logo_key {
+        fill: var(--_key);
+      }
+    }
+  }
+</style>

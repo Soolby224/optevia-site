@@ -13,18 +13,12 @@ export default defineConfig({
   ],
   fonts: [
     {
-      name: "Inter",
-      cssVariable: "--font-inter",
-      provider: fontProviders.local(),
-      options: {
-        variants: [
-          {
-            weight: 400,
-            style: "normal",
-            src: ["./src/assets/fonts/inter-regular.woff2"],
-          },
-        ],
-      },
+      name: "Onest",
+      cssVariable: "--font-onest",
+      provider: fontProviders.google(),
+      weights: [400, 500, 600, 700],
+      styles: ["normal"],
+      subsets: ["latin", "latin-ext"],
     },
   ],
   vite: { build: { cssTarget: "safari15.4" } },

@@ -1,0 +1,249 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+import Icon from "@/components/media/Icon.astro";
+import arrowRight from "@/assets/icons/arrow-right.svg";
+
+const cases = [
+  {
+    tag: "Rénovation énergétique · [Ville]",
+    before: "Comment",
+    client: "[Nom du client]",
+    after: "est passé de la page 3 au top 3 de Google Maps",
+    from: "[XX]/100",
+    to: "[XX]/100",
+    metric: "Score de visibilité",
+    photo: "Pose de pompe à chaleur",
+  },
+  {
+    tag: "Plomberie · [Ville]",
+    before: "Comment",
+    client: "[Nom du client]",
+    after: "reçoit ses demandes de devis depuis sa fiche Google",
+    from: "[XX] appels/mois",
+    to: "[XX] appels/mois",
+    metric: "Appels depuis la fiche",
+    photo: "Plombier en intervention chez un client",
+  },
+  {
+    tag: "Électricité · [Ville]",
+    before: "Comment",
+    client: "[Nom du client]",
+    after: "est devenu recommandé par les IA dans sa ville",
+    from: "[XX]/100",
+    to: "[XX]/100",
+    metric: "Score de visibilité",
+    photo: "Électricien devant son camion",
+  },
+];
+---
+
+<div class="cases-home_wrap">
+  <div class="cases-home_head">
+    <Heading id="cases-home-title" class="heading-accent">
+      Chaque projet,<br /><strong>se mesure à ses résultats.</strong>
+    </Heading>
+    <Button element="link" variant="link" href="/realisations" arrow>
+      Voir toutes les études de cas
+    </Button>
+  </div>
+
+  <div class="cases-home_list">
+    {cases.map((item, index) => (
+      <div class:list={["cases-home_row", index % 2 === 1 && "is-reversed"]}>
+        <div
+          class="cases-home_photo"
+          role="img"
+          aria-label={`Emplacement photo : ${item.photo}`}
+        >
+          [Photo : {item.photo}]
+        </div>
+        <a href="/realisations" class="cases-home_card">
+          <span class="cases-home_tag">{item.tag}</span>
+          <h3 class="cases-home_title">
+            {item.before} <span>{item.client}</span> {item.after}
+          </h3>
+          <div class="cases-home_footer">
+            <div class="cases-home_results">
+              <span class="cases-home_pill">
+                <small>Avant</small>
+                {item.from}
+              </span>
+              <Icon class="cases-home_arrow" src={arrowRight} variant="small" />
+              <span class="cases-home_pill is-after">
+                <small>Après</small>
+                {item.to}
+              </span>
+            </div>
+            <span class="cases-home_more">
+              {item.metric} · lire l’étude de cas
+              <span class="cases-home_go">
+                <Icon src={arrowRight} variant="small" />
+              </span>
+            </span>
+          </div>
+        </a>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .cases-home_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .cases-home_head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.25rem 3rem;
+    }
+
+    .cases-home_list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cases-home_row {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: 1rem;
+      &.is-reversed {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+        & .cases-home_photo {
+          order: 1;
+        }
+      }
+      @media (width < 56.25rem) {
+        &,
+        &.is-reversed {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        &.is-reversed .cases-home_photo {
+          order: 0;
+        }
+      }
+    }
+
+    .cases-home_photo {
+      min-height: clamp(18.75rem, 34vw, 28.75rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-small);
+      background-color: var(--light-300);
+      font-size: 0.8125rem;
+      color: var(--dark-500);
+      @media (width < 56.25rem) {
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+      }
+    }
+
+    .cases-home_card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: clamp(1.5rem, 2.6vw, 2rem);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-small);
+      background-color: var(--light-100);
+      color: var(--dark-900);
+      &:hover .cases-home_go {
+        background-color: var(--brand-500);
+        color: var(--dark-900);
+      }
+    }
+
+    .cases-home_tag {
+      align-self: flex-start;
+      padding: 0.375rem 0.625rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: 0.25rem;
+      background-color: var(--light-200);
+      font-size: 0.8125rem;
+      font-weight: var(--primary-medium);
+    }
+
+    .cases-home_title {
+      font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      & span {
+        color: var(--coral-500);
+      }
+    }
+
+    .cases-home_footer {
+      margin-top: auto;
+      padding-top: 1.25rem;
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    .cases-home_results {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .cases-home_pill {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.5rem 0.875rem;
+      border-radius: var(--radius-round);
+      background-color: var(--light-200);
+      color: var(--dark-500);
+      font-size: 1.0625rem;
+      font-weight: var(--primary-semibold);
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+      & small {
+        font-size: 0.8125rem;
+        font-weight: var(--primary-medium);
+        color: var(--dark-500);
+      }
+      &.is-after {
+        background-color: var(--light-300);
+        color: var(--dark-900);
+      }
+    }
+
+    .cases-home_arrow {
+      color: #b8ae9c;
+    }
+
+    .cases-home_more {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 0.875rem;
+      font-size: 0.9375rem;
+    }
+
+    .cases-home_go {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: var(--radius-round);
+      background-color: var(--dark-900);
+      color: var(--light-100);
+      font-size: 1.125rem;
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
+    }
+  }
+</style>

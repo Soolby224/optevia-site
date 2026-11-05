@@ -1,7 +1,7 @@
 ---
-import Icon from "@/components/media/Icon.astro";
-import logo from "@/assets/logo/logo.svg";
-import { SITE_NAME } from "@/consts.ts";
+import Button from "@/components/Button.astro";
+import Logo from "@/components/global/Logo.astro";
+import { SITE_NAME, CONTACT } from "@/consts.ts";
 
 interface Props {
   /** Set to `false` to omit the component. */
@@ -9,115 +9,270 @@ interface Props {
 }
 
 const { render = true } = Astro.props;
+
+const columns = [
+  {
+    title: "Services",
+    links: [
+      { label: "Être choisi", href: "/etre-choisi" },
+      { label: "Site internet", href: "/etre-choisi#site" },
+      { label: "Fiche Google", href: "/etre-choisi#fiche-google" },
+      { label: "Sortir en premier dans sa ville", href: "/etre-choisi#local" },
+      { label: "Être conseillé par les IA", href: "/etre-choisi#ia" },
+      { label: "Gagner du temps et e‑réputation", href: "/gagner-du-temps" },
+      { label: "Avis clients", href: "/gagner-du-temps#avis" },
+    ],
+  },
+  {
+    title: "Métiers",
+    links: [
+      { label: "Rénovation énergétique", href: "/metiers/renovation-energetique" },
+      { label: "Pompe à chaleur", href: "/metiers/pompe-a-chaleur" },
+      { label: "Plombier", href: "/metiers/plombier" },
+      { label: "Électricien", href: "/metiers/electricien" },
+      { label: "Menuisier", href: "/metiers/menuisier" },
+      { label: "Couvreur", href: "/metiers/couvreur" },
+      { label: "Chauffagiste", href: "/metiers/chauffagiste" },
+    ],
+  },
+  {
+    title: "Zones",
+    links: [
+      { label: "Paris", href: "/zones/paris" },
+      { label: "Hauts-de-Seine", href: "/zones/hauts-de-seine" },
+      { label: "Seine-Saint-Denis", href: "/zones/seine-saint-denis" },
+      { label: "Val-de-Marne", href: "/zones/val-de-marne" },
+      { label: "Yvelines", href: "/zones/yvelines" },
+      { label: "Essonne", href: "/zones/essonne" },
+      { label: "Val-d’Oise", href: "/zones/val-d-oise" },
+      { label: "Seine-et-Marne", href: "/zones/seine-et-marne" },
+      { label: "Toutes les zones", href: "/zones" },
+    ],
+  },
+  {
+    title: "Ressources",
+    links: [
+      { label: "Blog", href: "/blog" },
+      { label: "Guides pratiques", href: "/guides" },
+      { label: "Être conseillé par les IA", href: "/guides/ia" },
+      { label: "FAQ", href: "/faq" },
+    ],
+  },
+  {
+    title: "Optevia",
+    links: [
+      { label: "Tarifs", href: "/tarifs" },
+      { label: "Réalisations", href: "/#realisations" },
+      { label: "À propos", href: "/a-propos" },
+      { label: "Contact", href: "/contact" },
+      { label: "Audit gratuit", href: "/#audit" },
+    ],
+  },
+];
+
+const legal = [
+  { label: "Mentions légales", href: "/mentions-legales" },
+  { label: "CGV", href: "/cgv" },
+  { label: "Politique de confidentialité", href: "/confidentialite" },
+  { label: "Gérer les cookies", href: "/cookies" },
+  { label: "Accessibilité", href: "/accessibilite" },
+  { label: "Plan du site", href: "/plan-du-site" },
+];
+
+const socials = [
+  { label: "LinkedIn", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "Facebook", href: "#" },
+];
 ---
 
 {render && (
-  <footer class="footer_wrap">
-    <div class="footer_inner">
+  <footer class="footer_wrap theme-dark" id="contact">
+    <div class="footer_inner theme-light">
       <div class="footer_top">
-        <a class="footer_logo" href="/" aria-label={SITE_NAME}>
-          <Icon src={logo} variant="full-width" />
-        </a>
-        <nav aria-label="Footer">
-          <ul class="footer_links">
-            <li>
-              <a class="footer_link" href="/">
-                Home
-              </a>
-            </li>
-            <li>
-              <a class="footer_link" href="/example-components">
-                Example Components
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <div class="footer_brand">
+          <a href="/" aria-label={`${SITE_NAME}, accueil`}>
+            <Logo variant="dark" class="footer_logo" />
+          </a>
+          <p class="footer_tagline">
+            Studio de visibilité pour les artisans et entreprises de l’habitat.
+          </p>
+        </div>
+        <Button element="link" href="/#audit" arrow>
+          Audit gratuit
+        </Button>
       </div>
+
+      <div class="footer_columns">
+        {columns.map((column) => (
+          <nav aria-label={column.title}>
+            <h3 class="footer_title">{column.title}</h3>
+            <ul class="footer_list">
+              {column.links.map((link) => (
+                <li>
+                  <a class="footer_link" href={link.href}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+
       <div class="footer_bottom">
-        <p class="footer_copyright text-style-small">
-          &copy; <span id="year">{new Date().getFullYear()}</span>&#160;
-          {SITE_NAME}
-        </p>
+        <nav class="footer_legal" aria-label="Informations légales">
+          {legal.map((link) => (
+            <a class="footer_link is-small" href={link.href}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
+        <div class="footer_socials">
+          <span>Suivre Optevia :</span>
+          {socials.map((link) => (
+            <a class="footer_social" href={link.href}>
+              {link.label}
+            </a>
+          ))}
+        </div>
       </div>
+      <p class="footer_copyright">
+        © {new Date().getFullYear()} {SITE_NAME} · Agence de visibilité pour
+        artisans de l’habitat · {CONTACT.address} · {CONTACT.phone} ·{" "}
+        {CONTACT.siret}
+      </p>
     </div>
   </footer>
 )}
 
-<script>
-  const year = document.querySelector<HTMLSpanElement>("#year");
-
-  if (year) {
-    year.textContent = new Date().getFullYear().toString();
-  }
-</script>
-
 <style is:global>
   @layer components {
     .footer_wrap {
-      display: flex;
-      justify-content: center;
-      padding-block: var(--section-space-small);
-      padding-inline: var(--site-margin);
-      background-color: var(--background);
-      color: var(--text);
-      border-top: var(--border-width) solid var(--border);
+      padding: clamp(1.5rem, 3vw, 2.5rem) var(--site-margin) 2rem;
     }
 
     .footer_inner {
-      width: 100%;
       max-width: var(--max-width-main);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-6);
+      margin-inline: auto;
+      padding: clamp(2rem, 4vw, 3.5rem);
+      border-radius: var(--radius-main);
+      background-color: var(--background-2);
     }
 
     .footer_top {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
       justify-content: space-between;
-      gap: var(--space-4) var(--space-6);
+      align-items: center;
+      gap: 1.25rem;
+      padding-bottom: clamp(2rem, 4vw, 3rem);
+      margin-bottom: clamp(2rem, 4vw, 3rem);
+      border-bottom: var(--border-width) solid var(--border);
+    }
+
+    .footer_brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .footer_logo {
-      display: block;
-      width: 7.5rem;
-      max-width: 100%;
-      transition: opacity var(--hover-duration) var(--hover-ease);
-      @media (hover: hover) {
-        &:hover {
-          opacity: 0.6;
-        }
+      font-size: 1.875rem;
+    }
+
+    .footer_tagline {
+      font-size: 0.9375rem;
+      color: var(--text-2);
+    }
+
+    .footer_columns {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+      @media (width < 62.5rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      @media (width < 23.75rem) {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
-    .footer_links {
+    .footer_title {
+      margin-bottom: 1rem;
+      font-size: 1.0625rem;
+      font-weight: var(--primary-semibold);
+      letter-spacing: -0.013em;
+      line-height: 1.2;
+    }
+
+    .footer_list {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--space-4);
-      font-size: var(--text-small);
-      font-weight: var(--primary-medium);
+      flex-direction: column;
+      gap: 0.125rem;
     }
 
     .footer_link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.25rem;
+      font-size: 0.9375rem;
       color: var(--text-2);
-      text-decoration: none;
-      transition: color var(--hover-duration) var(--hover-ease);
+      text-underline-offset: 0.2em;
+      &.is-small {
+        font-size: 0.875rem;
+      }
       @media (hover: hover) {
         &:hover {
           color: var(--text);
+          text-decoration: underline;
         }
+      }
+      @media (width < 47.5rem) {
+        min-height: 2.75rem;
       }
     }
 
     .footer_bottom {
-      padding-top: var(--space-4);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem 2rem;
+      margin-top: clamp(2rem, 4vw, 3rem);
+      padding-top: 1.5rem;
       border-top: var(--border-width) solid var(--border);
     }
 
-    .footer_copyright {
+    .footer_legal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 1.375rem;
+    }
+
+    .footer_socials {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.375rem 1.125rem;
+      font-size: 0.875rem;
       color: var(--text-2);
+    }
+
+    .footer_social {
+      color: var(--text);
+      font-weight: var(--primary-medium);
+      @media (hover: hover) {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .footer_copyright {
+      margin-top: 1.25rem;
+      font-size: 0.8125rem;
+      color: var(--text-3);
     }
   }
 </style>

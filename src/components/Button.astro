@@ -5,6 +5,7 @@ import arrow from "@/assets/icons/arrow-full.svg";
 import close from "@/assets/icons/close.svg";
 import play from "@/assets/icons/play.svg";
 import pause from "@/assets/icons/pause.svg";
+import arrowRight from "@/assets/icons/arrow-right.svg";
 import { slotContent } from "@/utils/slots.ts";
 
 type Emphasis = "primary" | "secondary";
@@ -75,12 +76,18 @@ type Kind =
 type Props = {
   /** Set to `false` to omit the component. */
   render?: boolean;
+  /** Button size. */
+  size?: "main" | "small";
+  /** Trailing arrow after the text (main and link variants). */
+  arrow?: boolean;
 } & Tag &
   Kind;
 
 type AllProps = HTMLAttributes<"button"> &
   Omit<HTMLAttributes<"a">, "type"> & {
     render?: boolean;
+    size?: "main" | "small";
+    arrow?: boolean;
     variant?: "main" | "link" | "play" | "close" | "arrow";
     emphasis?: Emphasis;
     label?: string;
@@ -93,6 +100,8 @@ type AllProps = HTMLAttributes<"button"> &
 
 const {
   render = true,
+  size = "main",
+  arrow: hasArrow = false,
   variant = "main",
   emphasis = "primary",
   label,
@@ -129,6 +138,8 @@ const named = {
       "button_wrap",
       emphasis !== "primary" && emphasis,
       variant !== "main" && variant,
+      size !== "main" && size,
+      isWritten && hasArrow && "has-arrow",
       variant === "arrow" && direction === "back" && "back",
       className,
     ]}
@@ -140,6 +151,11 @@ const named = {
     {isWritten && (
       <span class="button_text text-style-trim">
         <Fragment set:html={content} />
+      </span>
+    )}
+    {isWritten && hasArrow && (
+      <span class="button_trail">
+        <Icon class="button_trail_icon" src={arrowRight} variant="medium" />
       </span>
     )}
     {variant === "play" && (
@@ -164,11 +180,15 @@ const named = {
       justify-content: center;
       align-items: center;
       gap: 0.5em;
-      padding: 0.75em 1.5em;
+      min-height: 3.75rem;
+      padding: 0 1.5rem 0 1.75rem;
       background-color: var(--button-background);
       color: var(--button-text);
-      border: var(--border-width) solid var(--button-border);
-      border-radius: 0.5em;
+      border: 0.09375rem solid var(--button-border);
+      border-radius: var(--radius-button);
+      font-size: 1.125rem;
+      font-weight: var(--primary-semibold);
+      letter-spacing: -0.009em;
       line-height: 1.2;
       text-decoration: none;
       text-align: center;
@@ -182,6 +202,21 @@ const named = {
           color: var(--button-text-hover);
           border-color: var(--button-border-hover);
         }
+      }
+      &.small {
+        min-height: 2.875rem;
+        padding: 0 1rem 0 1.25rem;
+        font-size: 0.9375rem;
+      }
+      &.has-arrow {
+        justify-content: space-between;
+        gap: 2.5rem;
+        &.small {
+          gap: 1.5rem;
+        }
+      }
+      &:active:not(:disabled) {
+        transform: translateY(0.0625rem);
       }
       &.secondary {
         --button-background: var(--button-2-background);
@@ -199,6 +234,7 @@ const named = {
         --button-text-hover: var(--link-text-hover);
         --button-border-hover: var(--link-border);
 
+        min-height: 0;
         padding: 0.4em 0;
         border: 0;
         border-bottom: var(--border-width) solid var(--button-border);
@@ -245,6 +281,34 @@ const named = {
         cursor: not-allowed;
         opacity: 0.5;
       }
+      &.link.has-arrow {
+        justify-content: flex-start;
+        gap: 0.625rem;
+        min-height: 3rem;
+        border-bottom-width: 0.125rem;
+        border-color: currentcolor;
+        font-size: 1.0625rem;
+      }
+    }
+
+    /* Trailing arrow: leaves on the right, comes back from the left. */
+    .button_trail {
+      display: inline-flex;
+      overflow: hidden;
+    }
+    @keyframes button-arrow {
+      0% { transform: translateX(0); opacity: 1; }
+      38% { transform: translateX(1.125rem); opacity: 0; }
+      39% { transform: translateX(-1.125rem); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    @media (hover: hover) {
+      .button_wrap:hover .button_trail_icon {
+        animation: button-arrow 600ms cubic-bezier(0.6, 0, 0.2, 1);
+      }
+    }
+    .button_wrap:focus-visible .button_trail_icon {
+      animation: button-arrow 600ms cubic-bezier(0.6, 0, 0.2, 1);
     }
   }
 </style>

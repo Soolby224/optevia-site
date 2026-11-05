@@ -1,0 +1,186 @@
+---
+import Button from "@/components/Button.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Icon from "@/components/media/Icon.astro";
+import plus from "@/assets/icons/plus.svg";
+
+const items = [
+  {
+    title: "Notre mission",
+    text: "Faire trouver les artisans par les clients de leur ville : sur Google, sur Google Maps et dans les réponses des IA comme ChatGPT. Puis leur faire gagner du temps pour qu’aucun de ces clients ne leur échappe.",
+  },
+  {
+    title: "Notre vision",
+    text: "Un artisan qui fait du bon travail ne devrait jamais perdre un chantier parce qu’un concurrent est mieux placé sur Google. La visibilité doit suivre la qualité du travail.",
+  },
+  {
+    title: "Nos valeurs",
+    text: "Des prix affichés et sans engagement longue durée. Un site qui vous appartient. Des mots simples, sans jargon. Et une seule spécialité : l’habitat.",
+  },
+];
+---
+
+<div class="about-home_wrap">
+  <div class="about-home_text">
+    <Heading id="about-home-title" class="heading-accent">
+      Une agence qui ne travaille<br /><strong>qu’avec l’habitat.</strong>
+    </Heading>
+    <p class="about-home_lead">
+      Plombiers, chauffagistes, électriciens, couvreurs, entreprises de
+      rénovation énergétique : on connaît vos métiers, vos clients et ce qu’ils
+      tapent sur Google. C’est ce qui nous permet d’aller vite et de viser
+      juste.
+    </p>
+    <Button element="link" href="/a-propos" arrow>Découvrir Optevia</Button>
+  </div>
+
+  <div
+    class="about-home_photo"
+    role="img"
+    aria-label="Photo : un artisan au travail sur un toit"
+  >
+    <span>[Photo : un artisan au travail, lumière naturelle]</span>
+  </div>
+
+  <div class="about-home_list">
+    {items.map((item, index) => (
+      <details class="about-home_item" name="about-home" open={index === 0}>
+        <summary class="about-home_summary">
+          {item.title}
+          <span class="about-home_toggle">
+            <Icon src={plus} variant="small" />
+          </span>
+        </summary>
+        <p class="about-home_answer">{item.text}</p>
+      </details>
+    ))}
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .about-home_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.9fr) minmax(0, 1.05fr);
+      gap: clamp(1.25rem, 2.4vw, 2rem);
+      align-items: stretch;
+      @media (width < 62.5rem) {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+      @media (width < 43.75rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .about-home_text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.25rem;
+      & .heading {
+        font-size: clamp(2.125rem, 3.6vw, 3.25rem);
+      }
+      @media (width < 62.5rem) {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .about-home_lead {
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .about-home_photo {
+      min-height: 26.25rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 1rem;
+      border-radius: var(--radius-main);
+      background-color: var(--light-300);
+      font-size: 0.75rem;
+      color: var(--dark-500);
+      text-align: right;
+      @media (width < 43.75rem) {
+        min-height: 16.25rem;
+      }
+    }
+
+    .about-home_list {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .about-home_item {
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+      background-color: var(--light-100);
+      transition:
+        background-color 250ms var(--hover-ease),
+        border-color 250ms var(--hover-ease);
+      &[open] {
+        background-color: var(--dark-900);
+        border-color: var(--dark-900);
+        & .about-home_summary {
+          color: var(--light-100);
+        }
+        & .about-home_answer {
+          color: color-mix(in srgb, var(--light-200) 72%, transparent);
+        }
+        & .about-home_toggle {
+          background-color: var(--brand-500);
+          color: var(--dark-900);
+        }
+        & .icon_plus-vertical {
+          opacity: 0;
+        }
+      }
+    }
+
+    .about-home_summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 2.75rem;
+      padding: 1rem 1rem 1rem 1.375rem;
+      font-weight: var(--primary-semibold);
+      font-size: 1.25rem;
+      letter-spacing: -0.015em;
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+
+    .about-home_toggle {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-button);
+      background-color: var(--dark-900);
+      color: var(--light-100);
+      font-size: 1.125rem;
+      & .icon_plus-vertical {
+        transition: opacity var(--hover-duration) var(--hover-ease);
+      }
+    }
+
+    .about-home_answer {
+      padding: 0 1.375rem 1.375rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-2);
+      text-box: none;
+    }
+  }
+</style>

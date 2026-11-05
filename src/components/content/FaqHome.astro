@@ -1,0 +1,169 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+import Icon from "@/components/media/Icon.astro";
+import plus from "@/assets/icons/plus.svg";
+
+interface Props {
+  /** Questions and answers. Also published as FAQPage structured data. */
+  items: { question: string; answer: string }[];
+}
+
+const { items } = Astro.props;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: items.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+};
+---
+
+<div class="faq-home_wrap">
+  <div class="faq-home_intro">
+    <p class="faq-home_eyebrow">FAQ</p>
+    <Heading id="faq-home-title" class="heading-accent">
+      Vos questions,<br /><strong>nos réponses.</strong>
+    </Heading>
+    <p class="faq-home_lead">
+      Tout ce que les artisans nous demandent avant de se lancer. Une autre
+      question ? Parlons-en.
+    </p>
+    <Button element="link" href="/contact" emphasis="secondary" size="small" arrow>
+      Poser une question
+    </Button>
+  </div>
+
+  <div class="faq-home_list">
+    {items.map((item, index) => (
+      <details class="faq-home_item" open={index === 0}>
+        <summary class="faq-home_question">
+          {item.question}
+          <span class="faq-home_toggle">
+            <Icon src={plus} variant="small" />
+          </span>
+        </summary>
+        <p class="faq-home_answer">{item.answer}</p>
+      </details>
+    ))}
+  </div>
+</div>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+<style is:global>
+  @layer components {
+    .faq-home_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+      @media (width < 62.5rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .faq-home_intro {
+      position: sticky;
+      top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+      @media (width < 62.5rem) {
+        position: static;
+      }
+    }
+
+    .faq-home_eyebrow {
+      font-size: 0.875rem;
+      font-weight: var(--primary-medium);
+    }
+
+    .faq-home_lead {
+      max-width: 25rem;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+
+    .faq-home_list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .faq-home_item {
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-small);
+      background-color: var(--light-100);
+      transition: border-color var(--hover-duration) var(--hover-ease);
+      &[open] {
+        border-color: var(--dark-900);
+        & .icon_plus-vertical {
+          opacity: 0;
+        }
+      }
+    }
+
+    .faq-home_question {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      min-height: 2.75rem;
+      padding: 0.875rem 0.875rem 0.875rem 1.375rem;
+      font-weight: var(--primary-medium);
+      font-size: 1.125rem;
+      letter-spacing: -0.009em;
+      &::-webkit-details-marker {
+        display: none;
+      }
+      &:focus-visible {
+        border-radius: var(--radius-small);
+      }
+      &:hover .faq-home_toggle {
+        background-color: var(--brand-500);
+        color: var(--dark-900);
+      }
+      @media (width < 37.5rem) {
+        font-size: 1.0625rem;
+        padding: 0.75rem 0.75rem 0.75rem 1.125rem;
+      }
+    }
+
+    .faq-home_toggle {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-button);
+      background-color: var(--dark-900);
+      color: var(--light-100);
+      font-size: 1.125rem;
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
+      & .icon_plus-vertical {
+        transition: opacity var(--hover-duration) var(--hover-ease);
+      }
+    }
+
+    .faq-home_answer {
+      max-width: 38.75rem;
+      padding: 0 1.375rem 1.25rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-2);
+      text-box: none;
+    }
+  }
+</style>

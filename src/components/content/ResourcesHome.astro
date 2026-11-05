@@ -1,0 +1,198 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+
+const featured = {
+  tag: "Guide IA",
+  title: "Comment apparaître dans les réponses de ChatGPT quand on est artisan",
+  text: "Ce que regardent les IA pour recommander une entreprise locale, et la méthode pour être cité.",
+  href: "/guides/ia",
+};
+
+const articles = [
+  { tag: "Votre ville", title: "Fiche Google : les 10 réglages que la plupart des artisans oublient", href: "/blog" },
+  { tag: "IA", title: "Rédiger une FAQ que Google et les IA reprennent mot pour mot", href: "/blog" },
+  { tag: "Bonnes pratiques", title: "Avis clients : comment en obtenir plus, sans jamais les acheter", href: "/blog" },
+  { tag: "Votre ville", title: "Faut-il créer une page par ville sur son site ?", href: "/blog" },
+];
+---
+
+<div class="resources-home_wrap">
+  <div class="resources-home_head">
+    <Heading id="resources-home-title" class="heading-accent">
+      Nos ressources,<br /><strong>pour être vu partout.</strong>
+    </Heading>
+    <p class="resources-home_lead">
+      Des guides pour être trouvé dans votre ville et conseillé par les IA,
+      écrits pour les artisans et entreprises de l’habitat.
+    </p>
+  </div>
+
+  <div class="resources-home_layout">
+    <a href={featured.href} class="resources-home_featured">
+      <div class="resources-home_featured_img" role="img" aria-label="Emplacement image du guide">
+        [Visuel du guide]
+      </div>
+      <div class="resources-home_featured_body">
+        <span class="resources-home_badge">{featured.tag}</span>
+        <h3 class="resources-home_featured_title">{featured.title}</h3>
+        <p class="resources-home_featured_text">{featured.text}</p>
+      </div>
+    </a>
+
+    <div class="resources-home_list">
+      {articles.map((article) => (
+        <a href={article.href} class="resources-home_article">
+          <span class="resources-home_thumb" role="img" aria-label="Emplacement image de l’article" />
+          <span class="resources-home_article_body">
+            <span class="resources-home_article_tag">{article.tag}</span>
+            <h3 class="resources-home_article_title">{article.title}</h3>
+          </span>
+        </a>
+      ))}
+      <Button element="link" href="/guides" size="small" arrow class="margin-top-6">
+        Toutes les ressources
+      </Button>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .resources-home_wrap {
+      width: 100%;
+    }
+
+    .resources-home_head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.125rem;
+      text-align: center;
+    }
+
+    .resources-home_lead {
+      max-width: 35rem;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--light-200);
+    }
+
+    .resources-home_layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: clamp(1.5rem, 3vw, 2.5rem);
+      margin-top: clamp(2.5rem, 5vw, 4rem);
+      @media (width < 62.5rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .resources-home_featured {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: var(--radius-small);
+      background-color: #000000;
+      color: var(--light-100);
+      &:hover .resources-home_featured_img {
+        transform: scale(1.02);
+      }
+    }
+
+    .resources-home_featured_img {
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--dark-800);
+      font-size: 0.8125rem;
+      color: var(--coral-400);
+      transition: transform 400ms var(--hover-ease);
+      @media (width < 62.5rem) {
+        aspect-ratio: 21 / 9;
+      }
+    }
+
+    .resources-home_featured_body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      padding: clamp(1.5rem, 2.6vw, 2rem);
+    }
+
+    .resources-home_badge {
+      align-self: flex-start;
+      padding: 0.25rem 0.625rem;
+      border-radius: 0.25rem;
+      background-color: var(--brand-500);
+      color: var(--dark-900);
+      font-size: 0.8125rem;
+      font-weight: var(--primary-semibold);
+    }
+
+    .resources-home_featured_title {
+      font-size: clamp(1.625rem, 2.6vw, 2.25rem);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+    }
+
+    .resources-home_featured_text {
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--brand-500);
+    }
+
+    .resources-home_list {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .resources-home_article {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 10.5rem minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-top: var(--border-width) solid var(--border);
+      color: var(--light-100);
+      &:last-of-type {
+        border-bottom: var(--border-width) solid var(--border);
+      }
+      &:hover .resources-home_article_title {
+        color: var(--brand-500);
+      }
+      @media (width < 37.5rem) {
+        grid-template-columns: 6rem minmax(0, 1fr);
+        gap: 1rem;
+      }
+    }
+
+    .resources-home_thumb {
+      aspect-ratio: 16 / 10;
+      border-radius: var(--radius-button);
+      background-color: var(--dark-800);
+    }
+
+    .resources-home_article_body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      min-width: 0;
+    }
+
+    .resources-home_article_tag {
+      font-size: 0.8125rem;
+      color: var(--brand-500);
+    }
+
+    .resources-home_article_title {
+      font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+      line-height: 1.25;
+      letter-spacing: -0.017em;
+      transition: color var(--hover-duration) var(--hover-ease);
+    }
+  }
+</style>

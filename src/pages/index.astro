@@ -1,41 +1,84 @@
 ---
 import Layout from "@/layouts/BaseLayout.astro";
 import Section from "@/components/wrapper/Section.astro";
-import Heading from "@/components/typography/Heading.astro";
-import Eyebrow from "@/components/typography/Eyebrow.astro";
-import Img from "@/components/media/Img.astro";
-import lumos_background from "@/assets/graphics/lumos-background.svg";
-import Icon from "@/components/media/Icon.astro";
-import logo_icon from "@/assets/logo/logo-icon.svg";
-import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import HeroHome from "@/components/content/HeroHome.astro";
+import AboutHome from "@/components/content/AboutHome.astro";
+import ServicesHome from "@/components/content/ServicesHome.astro";
+import StepsHome from "@/components/content/StepsHome.astro";
+import CasesHome from "@/components/content/CasesHome.astro";
+import AudienceHome from "@/components/content/AudienceHome.astro";
+import TestimonialsHome from "@/components/content/TestimonialsHome.astro";
+import FaqHome from "@/components/content/FaqHome.astro";
+import ResourcesHome from "@/components/content/ResourcesHome.astro";
+
+const faq = [
+  {
+    question: "Comment se passe l’audit gratuit ?",
+    answer:
+      "Vous indiquez votre métier et votre ville. On analyse votre présence sur Google, Maps et dans les réponses des IA, puis on vous envoie votre score de visibilité sur 100, calculé sur 6 piliers, avec les premiers points à corriger.",
+  },
+  {
+    question: "Combien coûte un accompagnement ?",
+    answer:
+      "L’audit est gratuit. Le site internet démarre à 597 €, payé une seule fois, logo compris : il vous appartient, sans abonnement. Pour bien sortir sur Google, sur Maps et dans les IA, c’est à partir de 60 € par mois. L’outil qui vous fait gagner du temps et s’occupe de vos avis : 150 € par mois, sans frais de mise en service. Les deux ensemble : 197 € par mois au lieu de 210 €, le site étant facturé à part.",
+  },
+  {
+    question: "Suis-je engagé sur une longue durée ?",
+    answer:
+      "Non. Nos formules sont sans engagement longue durée : vous restez parce que les résultats sont là, pas parce qu’un contrat vous y oblige.",
+  },
+  {
+    question: "C’est quoi le référencement par les IA ?",
+    answer:
+      "De plus en plus de clients demandent à ChatGPT, Gemini ou Perplexity quel artisan choisir. Notre travail : présenter vos informations et vos contenus de façon à ce que ces assistants vous recommandent.",
+  },
+  {
+    question: "J’ai déjà un site, faut-il le refaire ?",
+    answer:
+      "Pas forcément. L’audit dit si votre site peut être amélioré ou s’il freine vraiment votre visibilité. On ne propose une refonte que si elle est utile.",
+  },
+  {
+    question: "En combien de temps verrai-je des résultats ?",
+    answer:
+      "Cela dépend de votre point de départ et de la concurrence dans votre zone. Votre plan d’action indique les étapes et ce que l’on mesure à chacune, avec votre score comme repère.",
+  },
+];
 ---
 
-<Layout theme="dark">
-  <Section
-    paddingBottom="even"
-    containerClass="flex-grow"
-    paddingTop="even"
-    class="flex-grow"
-    style="min-height: calc(100svh - var(--nav-height));"
-  >
-    <ContentWrapper
-      class="flex-grow theme-brand"
-      variant="card"
-      mediaOpacity={100}
-    >
-      <Icon src={logo_icon} variant="large" />
-      <Heading variant="display" tag="h1" class="margin-block-8">
-        Style Guide
-      </Heading>
-      <Eyebrow variant="tag">v1.0.2</Eyebrow>
-      <Img
-        slot="column2"
-        src={lumos_background}
-        width={1920}
-        height={1080}
-        loading="eager"
-        fetchPriority="high"
-      />
-    </ContentWrapper>
+<Layout type="website">
+  <Section id="accueil" aria-labelledby="hero-home-title" paddingTop="none" paddingBottom="none" class="padding-top-4">
+    <HeroHome />
+  </Section>
+
+  <Section id="agence" aria-labelledby="about-home-title" class="background-2">
+    <AboutHome />
+  </Section>
+
+  <Section id="services" aria-labelledby="services-home-title">
+    <ServicesHome />
+  </Section>
+
+  <Section id="deroule" aria-labelledby="steps-home-title" theme="dark">
+    <StepsHome />
+  </Section>
+
+  <Section id="realisations" aria-labelledby="cases-home-title" class="background-2">
+    <CasesHome />
+  </Section>
+
+  <Section id="secteur" aria-labelledby="audience-home-title">
+    <AudienceHome />
+  </Section>
+
+  <Section id="avis" aria-labelledby="testimonials-home-title">
+    <TestimonialsHome />
+  </Section>
+
+  <Section id="faq" aria-labelledby="faq-home-title" class="background-2">
+    <FaqHome items={faq} />
+  </Section>
+
+  <Section id="ressources" aria-labelledby="resources-home-title" theme="dark">
+    <ResourcesHome />
   </Section>
 </Layout>
