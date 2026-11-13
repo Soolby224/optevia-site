@@ -1,0 +1,77 @@
+---
+import Breadcrumb from "@/components/global/Breadcrumb.astro";
+import type { ComponentProps } from "astro/types";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** SEO heading, small, above the tagline. */
+  title: string;
+  /** Text under the tagline. */
+  lead?: string;
+  /** Trail from the home page to the current page. The last item is the current page. */
+  breadcrumb: ComponentProps<typeof Breadcrumb>["items"];
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  class?: string;
+}
+
+const {
+  render = true,
+  title,
+  lead,
+  breadcrumb,
+  id = "hero-page-title",
+  class: className,
+} = Astro.props;
+---
+
+{render && (
+  <div class:list={["hero-page_wrap", className]}>
+    <Breadcrumb items={breadcrumb} />
+    <h1 id={id} class="hero-page_seo">{title}</h1>
+    <p class="hero-page_tagline"><slot /></p>
+    {lead && <p class="hero-page_lead">{lead}</p>}
+    <slot name="after" />
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .hero-page_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.125rem;
+    }
+
+    .hero-page_seo {
+      font-size: 0.9375rem;
+      font-weight: var(--primary-medium);
+      line-height: 1.4;
+      letter-spacing: 0;
+      color: var(--text-3);
+      text-box: none;
+    }
+
+    .hero-page_tagline {
+      font-size: clamp(2.5rem, 5.6vw, 5rem);
+      font-weight: var(--primary-semibold);
+      line-height: 1;
+      letter-spacing: -0.038em;
+      & strong,
+      & span {
+        font-weight: inherit;
+        color: var(--coral-500);
+      }
+    }
+
+    .hero-page_lead {
+      max-width: 37.5rem;
+      font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+  }
+</style>

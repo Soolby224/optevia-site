@@ -1,0 +1,215 @@
+---
+import Icon from "@/components/media/Icon.astro";
+import plus from "@/assets/icons/plus.svg";
+import arrowRight from "@/assets/icons/arrow-right.svg";
+import type { FaqTheme } from "@/data/faq.ts";
+
+interface Props {
+  /** Themes and their questions. Also published as FAQPage structured data. */
+  themes: FaqTheme[];
+}
+
+const { themes } = Astro.props;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: themes.flatMap((theme) =>
+    theme.items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  ),
+};
+---
+
+<div class="list-faq_wrap">
+  <nav class="list-faq_summary" aria-label="Thèmes de la FAQ">
+    <p class="list-faq_summary_title">Thèmes</p>
+    <ul>
+      {themes.map((theme) => (
+        <li><a href={`#${theme.id}`}>{theme.title}</a></li>
+      ))}
+    </ul>
+    <a href="#question" class="list-faq_ask">
+      Poser votre question
+      <Icon src={arrowRight} variant="small" />
+    </a>
+  </nav>
+
+  <div class="list-faq_themes">
+    {themes.map((theme) => (
+      <section id={theme.id} class="list-faq_theme" aria-labelledby={`faq-${theme.id}`}>
+        <h2 id={`faq-${theme.id}`} class="list-faq_title">{theme.title}</h2>
+        <div class="list-faq_items">
+          {theme.items.map((item) => (
+            <details class="list-faq_item">
+              <summary class="list-faq_question">
+                {item.question}
+                <span class="list-faq_toggle">
+                  <Icon src={plus} variant="small" />
+                </span>
+              </summary>
+              <p class="list-faq_answer">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</div>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+<style is:global>
+  @layer components {
+    .list-faq_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 17.5rem) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .list-faq_summary {
+      position: sticky;
+      top: 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      @media (width < 56.25rem) {
+        display: none;
+      }
+      & ul {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+      & li a {
+        display: flex;
+        align-items: center;
+        min-height: 2.75rem;
+        font-size: 1rem;
+        color: var(--text-2);
+        transition: color var(--hover-duration) var(--hover-ease);
+        &:hover {
+          color: var(--text);
+        }
+      }
+    }
+
+    .list-faq_summary_title {
+      font-size: 0.875rem;
+      font-weight: var(--primary-semibold);
+    }
+
+    .list-faq_ask {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      min-height: 2.75rem;
+      font-weight: var(--primary-semibold);
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--brand-500);
+      text-decoration-thickness: 0.125rem;
+      text-underline-offset: 0.3125rem;
+    }
+
+    .list-faq_themes {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .list-faq_theme {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      scroll-margin-top: 6rem;
+    }
+
+    .list-faq_title {
+      font-size: clamp(1.625rem, 2.6vw, 2.25rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .list-faq_items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .list-faq_item {
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-small);
+      background-color: var(--light-100);
+      transition: border-color var(--hover-duration) var(--hover-ease);
+      &[open] {
+        border-color: var(--dark-900);
+        & .icon_plus-vertical {
+          opacity: 0;
+        }
+      }
+    }
+
+    .list-faq_question {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      min-height: 2.75rem;
+      padding: 0.875rem 0.875rem 0.875rem 1.375rem;
+      font-size: 1.125rem;
+      font-weight: var(--primary-medium);
+      letter-spacing: -0.009em;
+      &::-webkit-details-marker {
+        display: none;
+      }
+      &:hover .list-faq_toggle {
+        background-color: var(--brand-500);
+        color: var(--dark-900);
+      }
+      @media (width < 37.5rem) {
+        font-size: 1.0625rem;
+        padding: 0.75rem 0.75rem 0.75rem 1.125rem;
+      }
+    }
+
+    .list-faq_toggle {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-button);
+      background-color: var(--dark-900);
+      color: var(--light-100);
+      font-size: 1.125rem;
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
+      & .icon_plus-vertical {
+        transition: opacity var(--hover-duration) var(--hover-ease);
+      }
+    }
+
+    .list-faq_answer {
+      max-width: 38.75rem;
+      padding: 0 1.375rem 1.25rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-2);
+      text-box: none;
+    }
+  }
+</style>

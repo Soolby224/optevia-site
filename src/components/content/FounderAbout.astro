@@ -1,0 +1,81 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
+import { CONTACT } from "@/consts.ts";
+---
+
+<div class="founder-about_wrap">
+  <div class="founder-about_photo">
+    <PhotoSlot alt="Portrait du fondateur d’Optevia" radius="large" />
+  </div>
+  <div class="founder-about_content">
+    <Heading id="founder-about-title" class="heading-accent">
+      Qui est derrière<br /><strong>Optevia ?</strong>
+    </Heading>
+    <p class="founder-about_name"><b>[Prénom Nom]</b>, fondateur</p>
+    <p class="founder-about_text">
+      [À compléter : votre parcours, pourquoi vous avez choisi les artisans de
+      l’habitat, ce qui vous différencie.]
+    </p>
+    <p class="founder-about_text">
+      Basé en Île-de-France, on intervient à Paris et dans les 7 départements
+      autour : Hauts-de-Seine, Seine-Saint-Denis, Val-de-Marne, Yvelines,
+      Essonne, Val-d’Oise et Seine-et-Marne.
+    </p>
+    <a class="founder-about_link" href={CONTACT.whatsapp} rel="noopener">
+      Écrire directement au fondateur sur WhatsApp
+    </a>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .founder-about_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      @media (width < 43.75rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .founder-about_photo {
+      min-height: 32.5rem;
+      @media (width < 43.75rem) {
+        min-height: 20rem;
+      }
+    }
+
+    .founder-about_content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.125rem;
+    }
+
+    .founder-about_name {
+      font-size: 1.125rem;
+    }
+
+    .founder-about_text {
+      max-width: 35rem;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .founder-about_link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      font-weight: var(--primary-semibold);
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--brand-500);
+      text-decoration-thickness: 0.125rem;
+      text-underline-offset: 0.3125rem;
+    }
+  }
+</style>

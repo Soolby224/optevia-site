@@ -1,0 +1,34 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroFaq from "@/components/content/HeroFaq.astro";
+import ListFaq from "@/components/content/ListFaq.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+import { FAQ_THEMES } from "@/data/faq.ts";
+---
+
+<Layout
+  type="website"
+  title="FAQ"
+  description="Les réponses d’Optevia aux questions des artisans : audit gratuit, site internet, fiche Google, visibilité dans les IA, automatisations, prix et engagement."
+>
+  <!-- Héro et formulaire de question -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small">
+    <HeroFaq themes={FAQ_THEMES} />
+  </Section>
+
+  <!-- Toutes les questions -->
+  <Section id="faq" aria-label="Toutes les questions" class="background-2">
+    <ListFaq themes={FAQ_THEMES} />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title">
+    <CtaBand
+      text="Appelez-nous, ou demandez votre audit gratuit : on vous rappelle et on répond à toutes vos questions, sans jargon."
+      secondary="phone"
+    >
+      Vous n’avez pas trouvé<br /><strong>votre réponse ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

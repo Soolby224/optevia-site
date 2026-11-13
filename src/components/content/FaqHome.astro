@@ -7,9 +7,29 @@ import plus from "@/assets/icons/plus.svg";
 interface Props {
   /** Questions and answers. Also published as FAQPage structured data. */
   items: { question: string; answer: string }[];
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  /** Small label above the heading. Empty hides it. */
+  eyebrow?: string;
+  /** Text under the heading. Empty hides it. */
+  lead?: string;
+  /** Button label. Empty hides the button. */
+  ctaLabel?: string;
+  /** Button destination. */
+  ctaHref?: string;
+  /** Publish the FAQPage structured data. Turn off when the page already has one. */
+  schema?: boolean;
 }
 
-const { items } = Astro.props;
+const {
+  items,
+  id = "faq-home-title",
+  eyebrow = "FAQ",
+  lead = "Tout ce que les artisans nous demandent avant de se lancer. Une autre question ? Parlons-en.",
+  ctaLabel = "Poser une question",
+  ctaHref = "/contact",
+  schema: hasSchema = true,
+} = Astro.props;
 
 const schema = {
   "@context": "https://schema.org",
@@ -24,16 +44,13 @@ const schema = {
 
 <div class="faq-home_wrap">
   <div class="faq-home_intro">
-    <p class="faq-home_eyebrow">FAQ</p>
-    <Heading id="faq-home-title" class="heading-accent">
-      Vos questions,<br /><strong>nos réponses.</strong>
+    {eyebrow && <p class="faq-home_eyebrow">{eyebrow}</p>}
+    <Heading id={id} class="heading-accent">
+      <slot>Vos questions,<br /><strong>nos réponses.</strong></slot>
     </Heading>
-    <p class="faq-home_lead">
-      Tout ce que les artisans nous demandent avant de se lancer. Une autre
-      question ? Parlons-en.
-    </p>
-    <Button element="link" href="/contact" emphasis="secondary" size="small" arrow>
-      Poser une question
+    {lead && <p class="faq-home_lead">{lead}</p>}
+    <Button render={!!ctaLabel} element="link" href={ctaHref} emphasis="secondary" size="small" arrow>
+      {ctaLabel}
     </Button>
   </div>
 
@@ -52,7 +69,7 @@ const schema = {
   </div>
 </div>
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+{hasSchema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
 <style is:global>
   @layer components {

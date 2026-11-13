@@ -1,0 +1,88 @@
+---
+import { SITE_URL } from "@/consts.ts";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Trail from the home page to the current page. The last item is the current page. */
+  items: { label: string; href?: string }[];
+  class?: string;
+}
+
+const { render = true, items, class: className } = Astro.props;
+
+const current = Astro.url.pathname;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: items.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.label,
+    item: new URL(item.href ?? current, SITE_URL).href,
+  })),
+};
+---
+
+{render && items.length > 0 && (
+  <nav class:list={["breadcrumb_wrap", className]} aria-label="Fil d’Ariane">
+    <ol class="breadcrumb_list">
+      {items.map((item, index) => (
+        <li class="breadcrumb_item" aria-current={index === items.length - 1 ? "page" : undefined}>
+          {item.href && index < items.length - 1 ? (
+            <a class="breadcrumb_link" href={item.href}>{item.label}</a>
+          ) : (
+            item.label
+          )}
+        </li>
+      ))}
+    </ol>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </nav>
+)}
+
+<style is:global>
+  @layer components {
+    .breadcrumb_wrap {
+      width: 100%;
+    }
+
+    .breadcrumb_list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-3);
+    }
+
+    .breadcrumb_item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      &[aria-current="page"] {
+        color: var(--text);
+        font-weight: var(--primary-medium);
+      }
+      & + &::before {
+        content: "/";
+        color: var(--border);
+      }
+    }
+
+    .breadcrumb_link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 0.25em;
+      transition: text-decoration-color var(--hover-duration) var(--hover-ease);
+      &:hover {
+        text-decoration-color: currentcolor;
+      }
+    }
+  }
+</style>

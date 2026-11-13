@@ -1,0 +1,275 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
+import Icon from "@/components/media/Icon.astro";
+import arrowRight from "@/assets/icons/arrow-right.svg";
+import { METIERS, PROFILES, metierHref } from "@/data/metiers.ts";
+
+const profiles = PROFILES.map((profile) => ({
+  ...profile,
+  list: profile.metiers.flatMap((slug) => METIERS.find((metier) => metier.slug === slug) ?? []),
+}));
+---
+
+<div class="profile-metiers_wrap" data-profiles>
+  <div class="profile-metiers_head">
+    <Heading id="profile-metiers-title" class="heading-accent">
+      Vous êtes plutôt…<br /><strong>artisan ou entreprise ?</strong>
+    </Heading>
+    <div class="profile-metiers_switch" role="group" aria-label="Votre profil">
+      {profiles.map((profile, index) => (
+        <button
+          type="button"
+          class="profile-metiers_option"
+          data-profile={profile.id}
+          aria-pressed={index === 0 ? "true" : "false"}
+        >
+          <b>{profile.label}</b>
+          <span>{profile.hint}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div aria-live="polite">
+    {profiles.map((profile, index) => (
+      <div class="profile-metiers_panel" data-panel={profile.id} hidden={index !== 0}>
+        <div class="profile-metiers_content">
+          <p class="profile-metiers_eyebrow">{profile.eyebrow}</p>
+          <h3 class="profile-metiers_title">{profile.title}</h3>
+          <p class="profile-metiers_text">{profile.text}</p>
+          <ul class="profile-metiers_needs">
+            {profile.needs.map((need) => <li>{need}</li>)}
+          </ul>
+        </div>
+        <div class="profile-metiers_trades">
+          <p class="profile-metiers_count">{profile.list.length} métiers accompagnés</p>
+          <div class="profile-metiers_list">
+            {profile.list.map((metier) => (
+              <a class="profile-metiers_card" href={metierHref(metier.slug)}>
+                <span class="profile-metiers_photo">
+                  <PhotoSlot tag="span" alt={metier.photo} radius="small" />
+                </span>
+                <span class="profile-metiers_name">
+                  {metier.name}
+                  <Icon src={arrowRight} variant="small" />
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <p class="profile-metiers_other">
+    Votre métier n’est pas dans la liste ? <a href="/contact">Parlons-en.</a>
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-profiles]").forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>("[data-profile]");
+    const panels = root.querySelectorAll<HTMLElement>("[data-panel]");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = button.dataset.profile;
+        buttons.forEach((other) => other.setAttribute("aria-pressed", String(other === button)));
+        panels.forEach((panel) => (panel.hidden = panel.dataset.panel !== id));
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  @layer components {
+    .profile-metiers_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2rem, 4vw, 3.5rem);
+    }
+
+    .profile-metiers_head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem 3rem;
+    }
+
+    .profile-metiers_switch {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.375rem;
+      padding: 0.375rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+      background-color: var(--light-100);
+      @media (width < 37.5rem) {
+        width: 100%;
+      }
+    }
+
+    .profile-metiers_option {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.125rem;
+      min-height: 2.75rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-small);
+      text-align: left;
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
+      & b {
+        font-size: 1.0625rem;
+        font-weight: var(--primary-semibold);
+      }
+      & span {
+        font-size: 0.8125rem;
+        color: var(--text-3);
+      }
+      &:hover {
+        background-color: var(--light-200);
+      }
+      &[aria-pressed="true"] {
+        background-color: var(--dark-900);
+        color: var(--light-100);
+        & span {
+          color: var(--brand-500);
+        }
+      }
+    }
+
+    .profile-metiers_panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: start;
+      &[hidden] {
+        display: none;
+      }
+      @media (width < 62.5rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .profile-metiers_content {
+      position: sticky;
+      top: 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      @media (width < 62.5rem) {
+        position: static;
+      }
+    }
+
+    .profile-metiers_eyebrow,
+    .profile-metiers_count {
+      font-size: 0.875rem;
+      font-weight: var(--primary-semibold);
+      color: var(--coral-500);
+    }
+
+    .profile-metiers_title {
+      font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .profile-metiers_text {
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .profile-metiers_needs {
+      border-bottom: var(--border-width) solid var(--border);
+      & li {
+        position: relative;
+        padding: 0.75rem 0 0.75rem 1.5rem;
+        border-top: var(--border-width) solid var(--border);
+        font-size: 1rem;
+        line-height: 1.45;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 1.375rem;
+          width: 0.625rem;
+          height: 0.125rem;
+          background-color: var(--dark-900);
+        }
+      }
+    }
+
+    .profile-metiers_trades {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .profile-metiers_list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      @media (width < 75rem) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      @media (width < 37.5rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .profile-metiers_card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      min-width: 0;
+      color: var(--text);
+      &:hover .profile-metiers_photo {
+        transform: translateY(-0.25rem);
+      }
+      &:hover .profile-metiers_name svg {
+        transform: translateX(0.25rem);
+      }
+    }
+
+    .profile-metiers_photo {
+      display: block;
+      aspect-ratio: 4 / 5;
+      transition: transform 300ms var(--hover-ease);
+    }
+
+    .profile-metiers_name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      min-height: 2.75rem;
+      font-size: 1.0625rem;
+      font-weight: var(--primary-semibold);
+      letter-spacing: -0.01em;
+      & svg {
+        flex: none;
+        transition: transform var(--hover-duration) var(--hover-ease);
+      }
+    }
+
+    .profile-metiers_other {
+      font-size: 1.0625rem;
+      color: var(--text-2);
+      & a {
+        font-weight: var(--primary-semibold);
+        color: var(--text);
+        text-decoration: underline;
+        text-decoration-color: var(--brand-500);
+        text-decoration-thickness: 0.125rem;
+        text-underline-offset: 0.3125rem;
+      }
+    }
+  }
+</style>

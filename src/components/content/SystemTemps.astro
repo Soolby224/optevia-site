@@ -1,0 +1,107 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
+
+const points = [
+  "Vos messages écrits avec vos mots",
+  "Relié à votre téléphone, votre agenda et votre fiche Google",
+  "Ajusté dès que vous le demandez",
+];
+---
+
+<div class="system-temps_wrap">
+  <div class="system-temps_content">
+    <Heading id="system-temps-title" class="heading-accent">
+      Un seul système,<br /><strong>monté pour vous.</strong>
+    </Heading>
+    <p class="system-temps_lead">
+      On construit toutes ces automatisations dans un seul outil, que l’on
+      installe et entretient pour vous. Vous n’avez rien à régler.
+    </p>
+    <ul class="system-temps_points">
+      {points.map((point) => <li>{point}</li>)}
+    </ul>
+    <Button element="link" href="/contact" arrow>Demander une démo</Button>
+  </div>
+
+  <figure class="system-temps_figure">
+    <div class="system-temps_visual">
+      <PhotoSlot
+        alt="Scénario automatique : appel manqué, SMS, attente d’un jour, puis relance ou nouveau devis"
+        radius="main"
+      />
+    </div>
+    <figcaption class="system-temps_caption">
+      [Illustration : remplacer par une capture de votre interface et de vos
+      scénarios.]
+    </figcaption>
+  </figure>
+</div>
+
+<style is:global>
+  @layer components {
+    .system-temps_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .system-temps_content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .system-temps_lead {
+      max-width: 30rem;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .system-temps_points {
+      width: 100%;
+      max-width: 30rem;
+      border-bottom: var(--border-width) solid var(--border);
+      & li {
+        position: relative;
+        padding: 0.75rem 0 0.75rem 1.5rem;
+        border-top: var(--border-width) solid var(--border);
+        font-size: 1.0625rem;
+        line-height: 1.45;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 1.1875rem;
+          width: 0.625rem;
+          height: 0.625rem;
+          border-radius: 0.125rem;
+          background-color: var(--brand-500);
+        }
+      }
+    }
+
+    .system-temps_figure {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .system-temps_visual {
+      aspect-ratio: 4 / 3;
+    }
+
+    .system-temps_caption {
+      font-size: 0.8125rem;
+      color: var(--text-3);
+    }
+  }
+</style>

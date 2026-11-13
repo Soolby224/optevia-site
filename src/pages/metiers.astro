@@ -1,0 +1,39 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroPage from "@/components/content/HeroPage.astro";
+import ProfileMetiers from "@/components/content/ProfileMetiers.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+---
+
+<Layout
+  type="website"
+  title="Métiers de l’habitat"
+  description="Site internet et référencement local par métier : plombier, chauffagiste, électricien, couvreur, rénovation énergétique, pompe à chaleur. Optevia ne travaille qu’avec l’habitat."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small" paddingBottom="small">
+    <HeroPage
+      title="Site internet et référencement local par métier de l’habitat"
+      lead="On ne travaille qu’avec les artisans et entreprises de l’habitat. Dites-nous qui vous êtes, puis choisissez votre métier."
+      breadcrumb={[{ label: "Accueil", href: "/" }, { label: "Métiers" }]}
+    >
+      Votre métier.<br /><span>Vos clients, votre ville.</span>
+    </HeroPage>
+  </Section>
+
+  <!-- Profil et métiers -->
+  <Section id="profil" aria-labelledby="profile-metiers-title" class="background-2">
+    <ProfileMetiers />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title">
+    <CtaBand
+      text="Gratuit : votre score sur 100 et les trois choses à corriger en premier."
+      secondary="phone"
+    >
+      Quel que soit votre métier,<br /><strong>on commence par l’audit.</strong>
+    </CtaBand>
+  </Section>
+</Layout>

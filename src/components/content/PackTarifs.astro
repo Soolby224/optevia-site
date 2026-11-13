@@ -1,0 +1,111 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+---
+
+<div id="pack" class="pack-tarifs_wrap">
+  <div class="pack-tarifs_content">
+    <Heading id="pack-tarifs-title" class="heading-accent">
+      Le pack.<br /><strong>Visibilité + Gagner du temps.</strong>
+    </Heading>
+    <p class="pack-tarifs_lead">
+      Le seul pack. Être trouvé, puis ne plus laisser filer un seul client qui
+      vous a trouvé.
+    </p>
+  </div>
+
+  <div class="pack-tarifs_card theme-dark">
+    <p class="pack-tarifs_label">Pack Visibilité + Gagner du temps</p>
+    <dl class="pack-tarifs_lines">
+      <div><dt>Visibilité</dt><dd>dès 60 €</dd></div>
+      <div><dt>Gagner du temps</dt><dd>150 €</dd></div>
+    </dl>
+    <div class="pack-tarifs_total">
+      <p class="pack-tarifs_price">197 €<small> / mois</small></p>
+      <p class="pack-tarifs_detail">au lieu de 210 € · sans engagement</p>
+    </div>
+    <Button element="link" href="/contact" arrow>Demander une démo</Button>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .pack-tarifs_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      scroll-margin-top: 6rem;
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pack-tarifs_content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .pack-tarifs_lead {
+      max-width: 32.5rem;
+      font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+
+    .pack-tarifs_card {
+      display: flex;
+      flex-direction: column;
+      padding: clamp(1.75rem, 3.4vw, 2.75rem);
+      border-radius: var(--radius-large);
+    }
+
+    .pack-tarifs_label {
+      margin-bottom: 1.125rem;
+      font-size: 1rem;
+      font-weight: var(--primary-semibold);
+      color: var(--brand-500);
+    }
+
+    .pack-tarifs_lines {
+      & div {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.875rem 0;
+        border-top: var(--border-width) solid var(--border);
+        font-size: 1.0625rem;
+      }
+      & dd {
+        font-weight: var(--primary-semibold);
+      }
+    }
+
+    .pack-tarifs_total {
+      padding: 1.25rem 0 1.5rem;
+      border-top: 0.09375rem solid var(--brand-500);
+    }
+
+    .pack-tarifs_price {
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      font-weight: var(--primary-semibold);
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      color: var(--brand-500);
+      & small {
+        font-size: 1.0625rem;
+        font-weight: var(--primary-medium);
+        letter-spacing: 0;
+        color: var(--text-2);
+      }
+    }
+
+    .pack-tarifs_detail {
+      margin-top: 0.625rem;
+      font-size: 0.9375rem;
+      color: var(--text-2);
+    }
+  }
+</style>

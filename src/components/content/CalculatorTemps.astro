@@ -1,0 +1,315 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+
+const fields = [
+  { key: "appels", label: "Appels manqués", hint: "par semaine", value: 3, min: 0, max: 100, step: 1 },
+  { key: "rappel", label: "Clients qui ne rappellent pas", hint: "en %", value: 50, min: 0, max: 100, step: 10, unit: "%" },
+  { key: "signes", label: "Devis signés", hint: "sur 10 devis", value: 3, min: 0, max: 10, step: 1, unit: "/ 10" },
+  { key: "panier", label: "Montant moyen", hint: "d’un chantier", value: 1500, min: 0, max: 100000, step: 100, unit: "€" },
+];
+
+const lines = [
+  { key: "appels", label: "Appels manqués par mois" },
+  { key: "perdus", label: "Clients qui partent ailleurs" },
+  { key: "chantiers", label: "Chantiers perdus" },
+];
+---
+
+<div class="calculator-temps_wrap">
+  <div class="calculator-temps_intro">
+    <Heading id="calculator-temps-title" class="heading-accent">
+      Combien vous coûtent<br /><strong>les appels manqués ?</strong>
+    </Heading>
+    <p class="calculator-temps_lead">
+      Entrez vos chiffres. Le calcul se fait tout seul, et donne une estimation
+      de ce que vous perdez chaque mois.
+    </p>
+  </div>
+
+  <div class="calculator-temps_card theme-light" data-calculator data-price="150">
+    <p class="calculator-temps_card_title">Estimation de vos pertes, chaque mois</p>
+    <div class="calculator-temps_fields">
+      {fields.map((field) => (
+        <div class="calculator-temps_field">
+          <label for={`calc-${field.key}`}>{field.label}</label>
+          <p class="calculator-temps_hint">{field.hint}</p>
+          <div class="calculator-temps_input">
+            <button type="button" data-step="-1" data-for={field.key} aria-label={`Moins : ${field.label}`}>−</button>
+            <input
+              id={`calc-${field.key}`}
+              data-field={field.key}
+              type="number"
+              inputmode="numeric"
+              min={field.min}
+              max={field.max}
+              step={field.step}
+              value={field.value}
+            />
+            {field.unit && <span>{field.unit}</span>}
+            <button type="button" data-step="1" data-for={field.key} aria-label={`Plus : ${field.label}`}>+</button>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div aria-live="polite" class="calculator-temps_result">
+      <dl class="calculator-temps_lines">
+        {lines.map((line) => (
+          <div><dt>{line.label}</dt><dd data-out={line.key}>–</dd></div>
+        ))}
+      </dl>
+      <div class="calculator-temps_total">
+        <span>Laissé à vos concurrents, chaque mois</span>
+        <p><b data-out="perte">–</b> €</p>
+      </div>
+      <p class="calculator-temps_year">
+        Soit environ <b><span data-out="an">–</span> €</b> sur un an. L’outil coûte 150 € par mois.
+      </p>
+      <p class="calculator-temps_verdict" data-out="verdict"></p>
+    </div>
+    <Button element="link" href="/contact" arrow>Demander une démo</Button>
+  </div>
+</div>
+
+<script>
+  const format = (value: number, digits = 0) =>
+    value.toLocaleString("fr-FR", { maximumFractionDigits: digits, minimumFractionDigits: 0 });
+
+  document.querySelectorAll<HTMLElement>("[data-calculator]").forEach((root) => {
+    const price = Number(root.dataset.price ?? 150);
+    const inputs = new Map<string, HTMLInputElement>();
+    root.querySelectorAll<HTMLInputElement>("[data-field]").forEach((input) => {
+      inputs.set(input.dataset.field ?? "", input);
+    });
+
+    const read = (key: string) => {
+      const input = inputs.get(key);
+      if (!input) return 0;
+      const value = Number(input.value);
+      return Math.min(Number(input.max), Math.max(Number(input.min), Number.isNaN(value) ? 0 : value));
+    };
+
+    const out = (key: string, text: string) => {
+      const el = root.querySelector<HTMLElement>(`[data-out="${key}"]`);
+      if (el) el.textContent = text;
+    };
+
+    const update = () => {
+      const perMonth = read("appels") * 4.33;
+      const lost = (perMonth * read("rappel")) / 100;
+      const jobs = (lost * read("signes")) / 10;
+      const loss = jobs * read("panier");
+      const net = loss - price;
+      out("appels", format(perMonth, 1));
+      out("perdus", format(lost, 1));
+      out("chantiers", format(jobs, 1));
+      out("perte", format(Math.round(loss / 50) * 50));
+      out("an", format(Math.round((loss * 12) / 100) * 100));
+      out(
+        "verdict",
+        net > 0
+          ? `Une fois l’outil payé, il vous reste environ ${format(Math.round(net / 50) * 50)} € par mois.`
+          : "Avec ces chiffres, l’outil n’est pas encore rentable : commencez par être trouvé.",
+      );
+    };
+
+    inputs.forEach((input, key) => {
+      input.addEventListener("input", update);
+      input.addEventListener("change", () => {
+        input.value = String(read(key));
+        update();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const key = button.dataset.for ?? "";
+        const input = inputs.get(key);
+        if (!input) return;
+        input.value = String(read(key) + Number(button.dataset.step) * Number(input.step));
+        input.value = String(read(key));
+        update();
+      });
+    });
+
+    update();
+  });
+</script>
+
+<style is:global>
+  @layer components {
+    .calculator-temps_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+      @media (width < 62.5rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .calculator-temps_intro {
+      position: sticky;
+      top: 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      @media (width < 62.5rem) {
+        position: static;
+      }
+    }
+
+    .calculator-temps_lead {
+      max-width: 27.5rem;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .calculator-temps_card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.125rem;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      border-radius: var(--radius-main);
+    }
+
+    .calculator-temps_card_title {
+      padding-bottom: 0.875rem;
+      border-bottom: 0.09375rem solid var(--text);
+      font-size: 0.9375rem;
+      font-weight: var(--primary-semibold);
+    }
+
+    .calculator-temps_fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem 1rem;
+      @media (width < 37.5rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .calculator-temps_field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      & label {
+        font-size: 1rem;
+        font-weight: var(--primary-semibold);
+      }
+    }
+
+    .calculator-temps_hint {
+      font-size: 0.8125rem;
+      color: var(--text-3);
+    }
+
+    .calculator-temps_input {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin-top: 0.375rem;
+      padding: 0.25rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-small);
+      &:focus-within {
+        border-color: var(--text);
+      }
+      & button {
+        flex: none;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: var(--radius-button);
+        background-color: var(--light-200);
+        font-size: 1.25rem;
+        transition: background-color var(--hover-duration) var(--hover-ease);
+        &:hover {
+          background-color: var(--brand-500);
+        }
+      }
+      & input {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        border: 0;
+        background: none;
+        text-align: center;
+        font: inherit;
+        font-size: 1.25rem;
+        font-weight: var(--primary-semibold);
+        font-variant-numeric: tabular-nums;
+        color: var(--text);
+        appearance: textfield;
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          appearance: none;
+        }
+      }
+      & span {
+        flex: none;
+        font-size: 0.9375rem;
+        color: var(--text-3);
+      }
+    }
+
+    .calculator-temps_result {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .calculator-temps_lines div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: var(--border-width) solid var(--border);
+      font-size: 1rem;
+      & dd {
+        font-weight: var(--primary-semibold);
+        font-variant-numeric: tabular-nums;
+      }
+    }
+
+    .calculator-temps_total {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      & span {
+        font-size: 0.9375rem;
+        font-weight: var(--primary-semibold);
+      }
+      & p {
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        font-weight: var(--primary-semibold);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        color: var(--coral-500);
+        font-variant-numeric: tabular-nums;
+      }
+      & b {
+        font-weight: inherit;
+      }
+    }
+
+    .calculator-temps_year {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text-2);
+      & b {
+        color: var(--text);
+      }
+    }
+
+    .calculator-temps_verdict {
+      padding: 0.875rem 1rem;
+      border-radius: var(--radius-small);
+      background-color: var(--light-200);
+      font-size: 1rem;
+      font-weight: var(--primary-medium);
+      line-height: 1.45;
+    }
+  }
+</style>

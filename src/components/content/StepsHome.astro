@@ -1,7 +1,9 @@
 ---
 import Heading from "@/components/typography/Heading.astro";
 
-const steps = [
+type Step = { when: string; title: string; text: string; ongoing?: boolean };
+
+const defaultSteps: Step[] = [
   { when: "Jour 1", title: "Appel de lancement", text: "On fait le point ensemble : votre métier, vos zones, vos photos et l’accès à votre fiche Google." },
   { when: "Jours 2 et 3", title: "Stratégie", text: "On étudie vos concurrents dans votre ville et ce qui les fait sortir en premier, pour faire mieux." },
   { when: "Jours 4 à 6", title: "Maquette", text: "On vous envoie la page d’accueil. Vous validez ou demandez des retouches, sur WhatsApp." },
@@ -9,20 +11,33 @@ const steps = [
   { when: "Jour 12", title: "Mise en ligne", text: "Votre site est en ligne avec votre nom de domaine. On vous montre comment recevoir vos demandes." },
   { when: "Ensuite, chaque mois", title: "Accompagnement", text: "Fiche Google suivie, compte rendu mensuel, outil Gagner du temps ajusté. Joignables sur WhatsApp.", ongoing: true },
 ];
+
+interface Props {
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  /** Text beside the heading. */
+  lead?: string;
+  /** Steps of the timeline. Defaults to the site launch. */
+  steps?: Step[];
+}
+
+const {
+  id = "steps-home-title",
+  lead = "De la signature à la mise en ligne, voici ce qui se passe. Et après, on ne vous lâche pas.",
+  steps = defaultSteps,
+} = Astro.props;
+
 ---
 
 <div class="steps-home_wrap">
   <div class="steps-home_head">
-    <Heading id="steps-home-title" class="heading-accent">
-      Votre site en ligne<br /><strong>en moins de 2 semaines.</strong>
+    <Heading id={id} class="heading-accent">
+      <slot>Votre site en ligne<br /><strong>en moins de 2 semaines.</strong></slot>
     </Heading>
-    <p class="steps-home_lead">
-      De la signature à la mise en ligne, voici ce qui se passe. Et après, on
-      ne vous lâche pas.
-    </p>
+    <p class="steps-home_lead">{lead}</p>
   </div>
 
-  <ol class="steps-home_list">
+  <ol class="steps-home_list" style={`--_count: ${steps.length};`}>
     {steps.map((step) => (
       <li class:list={["steps-home_item", step.ongoing && "is-ongoing"]}>
         <span class="steps-home_dot" aria-hidden="true" />
@@ -32,6 +47,7 @@ const steps = [
       </li>
     ))}
   </ol>
+  <slot name="cta" />
 </div>
 
 <style is:global>
@@ -61,7 +77,7 @@ const steps = [
     .steps-home_list {
       position: relative;
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: repeat(var(--_count, 6), minmax(0, 1fr));
       gap: 1.25rem;
       &::before {
         content: "";
@@ -71,7 +87,7 @@ const steps = [
         background-color: var(--border);
       }
       @media (width < 68.75rem) {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(min(3, var(--_count, 6)), minmax(0, 1fr));
         row-gap: 2.5rem;
         &::before {
           display: none;

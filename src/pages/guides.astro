@@ -1,0 +1,46 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroPage from "@/components/content/HeroPage.astro";
+import ListGuides from "@/components/content/ListGuides.astro";
+import TradesGuides from "@/components/content/TradesGuides.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+---
+
+<Layout
+  type="website"
+  title="Guides gratuits"
+  description="Cinq guides complets et gratuits pour les artisans : fiche Google, référencement local, recommandation par les IA, avis clients et site internet qui fait appeler."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small" paddingBottom="small">
+    <HeroPage
+      title="Guides gratuits pour les artisans : fiche Google, référencement local et IA"
+      lead="Cinq guides complets et gratuits. Ce qu’on applique pour nos clients, expliqué pour que vous puissiez le faire vous-même."
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Ressources", href: "/#ressources" },
+        { label: "Guides" },
+      ]}
+    >
+      Les guides.<br /><span>Pour aller au fond des choses.</span>
+    </HeroPage>
+  </Section>
+
+  <!-- Liste des guides -->
+  <Section aria-label="Liste des guides" paddingTop="none">
+    <ListGuides />
+  </Section>
+
+  <!-- Par métier -->
+  <Section aria-labelledby="trades-guides-title" class="background-2">
+    <TradesGuides />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title">
+    <CtaBand secondary="phone">
+      Pas le temps de lire ?<br /><strong>On s’en occupe.</strong>
+    </CtaBand>
+  </Section>
+</Layout>

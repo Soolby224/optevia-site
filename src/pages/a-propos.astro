@@ -1,0 +1,53 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Button from "@/components/Button.astro";
+import Breadcrumb from "@/components/global/Breadcrumb.astro";
+import HeroHome from "@/components/content/HeroHome.astro";
+import SectionHead from "@/components/content/SectionHead.astro";
+import StoryAbout from "@/components/content/StoryAbout.astro";
+import FounderAbout from "@/components/content/FounderAbout.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+---
+
+<Layout
+  type="website"
+  title="À propos"
+  description="Optevia est une agence de visibilité qui ne travaille qu’avec les artisans et entreprises de l’habitat en Île-de-France : site internet, fiche Google et réponses des IA."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-home-title" paddingTop="none" paddingBottom="small" gap="4" class="padding-top-4">
+    <Breadcrumb items={[{ label: "Accueil", href: "/" }, { label: "À propos" }]} />
+    <HeroHome
+      title="À propos d’Optevia : agence de visibilité pour les artisans de l’habitat en Île-de-France"
+      text="Optevia est née d’un constat simple : beaucoup d’artisans font du très bon travail, mais leurs futurs clients ne les trouvent pas. On s’occupe de leur site, de leur fiche Google et de leur place dans les réponses des IA."
+      photo="Le fondateur d’Optevia avec un artisan sur un chantier"
+      platforms={[]}
+    >
+      Rendre visible<br /><span>l’invisible.</span>
+    </HeroHome>
+  </Section>
+
+  <!-- Notre histoire -->
+  <Section id="agence" aria-labelledby="story-about-title" class="background-2">
+    <SectionHead
+      id="story-about-title"
+      eyebrow="Notre histoire"
+      text="Plombiers, chauffagistes, électriciens, couvreurs, entreprises de rénovation énergétique : on connaît vos métiers, vos clients et ce qu’ils tapent sur Google. C’est ce qui nous permet d’aller vite et de viser juste."
+    >
+      Une agence qui ne travaille<br /><strong>qu’avec l’habitat.</strong>
+    </SectionHead>
+    <StoryAbout />
+    <Button element="link" href="/#services" arrow>Voir nos services</Button>
+  </Section>
+
+  <!-- Fondateur -->
+  <Section id="fondateur" aria-labelledby="founder-about-title">
+    <FounderAbout />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand text="Votre score sur 100 et les trois choses à corriger en premier. Sans engagement." />
+  </Section>
+</Layout>

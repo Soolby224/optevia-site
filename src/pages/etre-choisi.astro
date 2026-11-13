@@ -1,0 +1,215 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Button from "@/components/Button.astro";
+import ServiceHero from "@/components/content/ServiceHero.astro";
+import SectionHead from "@/components/content/SectionHead.astro";
+import IncludedService from "@/components/content/IncludedService.astro";
+import StepsHome from "@/components/content/StepsHome.astro";
+import CasesHome from "@/components/content/CasesHome.astro";
+import PricingChoisi from "@/components/content/PricingChoisi.astro";
+import FaqHome from "@/components/content/FaqHome.astro";
+import OtherService from "@/components/content/OtherService.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+
+const included = [
+  {
+    title: "Site internet",
+    text: "Un site rapide et clair, construit pour qu’on vous demande un devis.",
+    points: [
+      "Pages services, zones d’intervention et réalisations",
+      "Formulaire de devis et appel en un clic sur mobile",
+      "Rapide, sécurisé, lisible sur téléphone",
+      "Hébergement, mises à jour et petites modifications inclus",
+    ],
+  },
+  {
+    title: "Profil Google",
+    text: "Votre fiche complète, vivante et à jour, celle qu’on a envie d’appeler.",
+    points: [
+      "Catégories, services, zones et horaires renseignés",
+      "Photos de chantiers et publications régulières",
+      "Réponses aux questions posées sur la fiche",
+      "Suivi des appels et des itinéraires depuis la fiche",
+    ],
+  },
+  {
+    title: "Référencement local",
+    text: "Apparaître quand on tape votre métier et votre ville.",
+    points: [
+      "Une page par métier et par ville que vous couvrez",
+      "Les mots que vos clients tapent vraiment",
+      "Données structurées lisibles par Google",
+      "Annuaires et informations cohérents partout",
+    ],
+  },
+  {
+    title: "Visibilité dans les IA",
+    text: "Être la réponse quand on demande à ChatGPT, Gemini ou Perplexity.",
+    points: [
+      "Contenus écrits en questions et réponses",
+      "Informations vérifiables là où les IA les cherchent",
+      "FAQ reprises par Google et les assistants",
+      "Suivi de vos mentions dans les réponses des IA",
+    ],
+  },
+];
+
+const steps = [
+  {
+    when: "[Jour 1]",
+    title: "L’audit gratuit",
+    text: "On regarde où vous en êtes sur Google, sur Maps, dans les IA et sur votre site actuel. Vous recevez votre score sur 100 et ce qu’il faut corriger en priorité.",
+  },
+  {
+    when: "[Semaines 1 à 2]",
+    title: "On prépare tout",
+    text: "Logo et couleurs, textes, photos, structure du site, fiche Google : on s’occupe de tout, sans jargon.",
+  },
+  {
+    when: "[Semaine 3]",
+    title: "Mise en ligne",
+    text: "Votre site est en ligne, votre fiche Google est complète, vos informations sont les mêmes partout sur internet.",
+  },
+  {
+    when: "Chaque mois",
+    title: "On fait vivre le tout",
+    text: "Publications sur votre fiche, nouvelles pages pour vos villes, suivi de vos positions sur Google et dans les IA.",
+    ongoing: true,
+  },
+];
+
+const faq = [
+  {
+    question: "Le site m’appartient vraiment ?",
+    answer:
+      "Oui, à 100 %. Vous payez le site une seule fois et il est à vous : pas d’abonnement pour le site, et vous pouvez le garder même si vous arrêtez la visibilité.",
+  },
+  {
+    question: "J’ai déjà un site. Je dois le refaire ?",
+    answer:
+      "Pas forcément. L’audit gratuit dit si votre site actuel peut faire l’affaire. Si oui, vous pouvez prendre seulement la visibilité, à partir de 197 € par mois.",
+  },
+  {
+    question: "Que se passe-t-il si j’arrête la visibilité ?",
+    answer:
+      "Rien de bloquant : vous gardez votre site et votre fiche Google. On arrête simplement le suivi, les publications et les comptes rendus. Il n’y a pas d’engagement longue durée.",
+  },
+  {
+    question: "Combien de temps avant d’avoir plus d’appels ?",
+    answer:
+      "Ça dépend de votre ville, de votre métier et de la concurrence. Votre audit vous donne un point de départ, et le compte rendu mensuel vous montre ce qui bouge, chiffres à l’appui.",
+  },
+  {
+    question: "« Être conseillé par ChatGPT », c’est quoi exactement ?",
+    answer:
+      "De plus en plus de gens demandent à ChatGPT ou à Gemini quel artisan appeler. On présente vos informations et vos contenus pour que ces outils vous trouvent et vous recommandent.",
+  },
+  {
+    question: "Je dois fournir quoi ?",
+    answer:
+      "Quelques photos de vos chantiers, vos horaires, les villes où vous intervenez, et une validation du logo et des textes. Le reste, on s’en occupe.",
+  },
+];
+---
+
+<Layout
+  type="website"
+  title="Être choisi : site internet et référencement local"
+  description="Être choisi, l’offre d’Optevia pour être trouvé et appelé : un site internet à votre image dès 597 € payés une fois, puis fiche Google, référencement local et IA dès 60 €/mois."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="service-hero-title" paddingTop="small">
+    <ServiceHero
+      title="Création de site internet et référencement local pour artisans"
+      text="Être choisi, c’est l’offre d’Optevia pour être trouvé et appelé : un site internet à votre image, dès 597 € payés une fois, puis votre fiche Google, votre ville et les IA suivies dès 60 € par mois."
+      photo="Un artisan montre son site sur une tablette à un client, chez lui"
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Services", href: "/#services" },
+        { label: "Être choisi" },
+      ]}
+    >
+      Être choisi,<br /><span>dès la première recherche.</span>
+      <Fragment slot="actions">
+        <Button element="link" href="/contact" arrow>Audit gratuit</Button>
+        <Button element="link" href="#tarif" emphasis="secondary" arrow>Voir le tarif</Button>
+      </Fragment>
+    </ServiceHero>
+  </Section>
+
+  <!-- Ce qui est inclus -->
+  <Section id="inclus" aria-labelledby="included-title" class="background-2">
+    <SectionHead
+      id="included-title"
+      text="Vos clients comparent avant d’appeler. On travaille chaque étape avec la même équipe, rien à coordonner de votre côté."
+    >
+      Ce qui est inclus,<br /><strong>concrètement.</strong>
+    </SectionHead>
+    <IncludedService items={included} />
+  </Section>
+
+  <!-- Comment ça se passe -->
+  <Section id="etapes" aria-labelledby="steps-title" theme="dark">
+    <StepsHome
+      id="steps-title"
+      steps={steps}
+      lead="On fait le travail. Vous gardez la main sur ce qui compte, et vous restez sur vos chantiers."
+    >
+      Comment ça se passe,<br /><strong>de l’audit à la mise en ligne.</strong>
+      <Button slot="cta" element="link" href="/contact" arrow>Commencer par l’audit gratuit</Button>
+    </StepsHome>
+  </Section>
+
+  <!-- Cas clients -->
+  <Section id="realisations" aria-labelledby="cases-home-title" class="background-2">
+    <CasesHome limit={2} />
+  </Section>
+
+  <!-- Tarif -->
+  <Section id="tarif" aria-labelledby="pricing-title">
+    <SectionHead
+      id="pricing-title"
+      text="Le site se paie une fois. La visibilité se suit chaque mois. Vous pouvez prendre l’un sans l’autre."
+    >
+      Des prix clairs,<br /><strong>affichés d’avance.</strong>
+    </SectionHead>
+    <PricingChoisi />
+  </Section>
+
+  <!-- FAQ du service -->
+  <Section id="faq-service" aria-labelledby="faq-service-title" class="background-2">
+    <FaqHome
+      items={faq}
+      id="faq-service-title"
+      eyebrow="FAQ · Être choisi"
+      lead="Sur le site, la fiche Google et la visibilité. Une autre question ? Appelez-nous, tout simplement."
+    >
+      Les questions<br /><strong>qu’on nous pose.</strong>
+    </FaqHome>
+  </Section>
+
+  <!-- L’autre service -->
+  <Section aria-labelledby="other-service-title" paddingBottom="none">
+    <OtherService
+      href="/gagner-du-temps"
+      text="Plus un appel raté, plus un devis oublié. Un SMS part tout seul quand vous ratez un appel, vos devis sont relancés, un avis est demandé à chaque client satisfait."
+      pricePrefix="dès"
+      price="150 €"
+      priceSuffix="/mois"
+      cta="Découvrir Gagner du temps"
+    >
+      Gagner du temps<br /><strong>et e‑réputation.</strong>
+    </OtherService>
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title">
+    <CtaBand
+      text="L’audit est gratuit : votre score de visibilité sur 100, et les trois choses à corriger en premier. Sans engagement, sans jargon."
+      secondary="phone"
+    >
+      Et si on regardait<br /><strong>où vous en êtes ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

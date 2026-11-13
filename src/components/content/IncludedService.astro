@@ -1,0 +1,94 @@
+---
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** What the service includes, one row per part. */
+  items: { title: string; text: string; points: string[] }[];
+  class?: string;
+}
+
+const { render = true, items, class: className } = Astro.props;
+---
+
+{render && items.length > 0 && (
+  <div class:list={["included-service_wrap", className]}>
+    {items.map((item) => (
+      <article class="included-service_row">
+        <div class="included-service_head">
+          <h3 class="included-service_title">{item.title}</h3>
+          <p class="included-service_text">{item.text}</p>
+        </div>
+        <ul class="included-service_points">
+          {item.points.map((point) => <li>{point}</li>)}
+        </ul>
+      </article>
+    ))}
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .included-service_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      border-top: 0.09375rem solid var(--text);
+    }
+
+    .included-service_row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      gap: 1.25rem clamp(2rem, 5vw, 5rem);
+      padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+      border-bottom: var(--border-width) solid var(--border);
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .included-service_head {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .included-service_title {
+      font-size: clamp(1.5rem, 2.4vw, 2rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .included-service_text {
+      max-width: 25rem;
+      font-size: 1.0625rem;
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+
+    .included-service_points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem clamp(1.5rem, 3vw, 2.5rem);
+      align-content: start;
+      @media (width < 37.5rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      & li {
+        position: relative;
+        padding-left: 1.5rem;
+        font-size: 1rem;
+        line-height: 1.45;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0.4375rem;
+          width: 0.625rem;
+          height: 0.625rem;
+          border-radius: 0.125rem;
+          background-color: var(--brand-500);
+        }
+      }
+    }
+  }
+</style>

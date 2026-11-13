@@ -1,0 +1,151 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+
+const roles = [
+  {
+    who: "Nous",
+    what: "Installation de l’outil, écriture des messages avec vos mots, réglage des relances, connexion à votre agenda et à votre fiche Google, mises à jour et ajustements.",
+  },
+  {
+    who: "Vous",
+    what: "Une application sur votre téléphone. Vous lisez les messages, vous rappelez, vous suivez vos devis. Quelques minutes par jour.",
+  },
+];
+
+const lines = [
+  "Les six automatisations installées et réglées",
+  "Une seule boîte pour tous vos messages",
+  "Demandes d’avis Google automatiques",
+  "Ajustements et support inclus",
+];
+---
+
+<div class="pricing-temps_wrap">
+  <div class="pricing-temps_content">
+    <Heading id="pricing-temps-title" class="heading-accent">
+      On installe.<br /><strong>Vous répondez.</strong>
+    </Heading>
+    <dl class="pricing-temps_roles">
+      {roles.map((role) => (
+        <div><dt>{role.who}</dt><dd>{role.what}</dd></div>
+      ))}
+    </dl>
+    <p class="pricing-temps_note">Prix [HT]. Sans engagement longue durée.</p>
+  </div>
+
+  <div class="pricing-temps_card theme-dark">
+    <p class="pricing-temps_label">Gagner du temps et e‑réputation</p>
+    <p class="pricing-temps_price">150 €<small>/mois</small></p>
+    <ul class="pricing-temps_lines">
+      {lines.map((line) => <li>{line}</li>)}
+    </ul>
+    <Button element="link" href="/contact" arrow>Demander une démo</Button>
+    <p class="pricing-temps_pack">
+      Avec la Visibilité : <strong>Pack à 197 €/mois</strong>.
+      <a href="/tarifs">Voir les tarifs</a>
+    </p>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .pricing-temps_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pricing-temps_content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .pricing-temps_roles {
+      border-top: 0.09375rem solid var(--text);
+      & div {
+        display: grid;
+        grid-template-columns: 5rem minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1.25rem 0;
+        border-bottom: var(--border-width) solid var(--border);
+      }
+      & dt {
+        font-size: 1.25rem;
+        font-weight: var(--primary-semibold);
+        letter-spacing: -0.02em;
+        color: var(--coral-500);
+      }
+      & dd {
+        font-size: 1.0625rem;
+        line-height: 1.6;
+        color: var(--text-2);
+      }
+    }
+
+    .pricing-temps_note {
+      font-size: 0.875rem;
+      color: var(--text-3);
+    }
+
+    .pricing-temps_card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: clamp(1.75rem, 3.4vw, 2.75rem);
+      border-radius: var(--radius-large);
+    }
+
+    .pricing-temps_label {
+      font-size: 1rem;
+      font-weight: var(--primary-semibold);
+      color: var(--brand-500);
+    }
+
+    .pricing-temps_price {
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      font-weight: var(--primary-semibold);
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      & small {
+        margin-left: 0.25rem;
+        font-size: 1.0625rem;
+        font-weight: var(--primary-medium);
+        letter-spacing: 0;
+        color: var(--text-2);
+      }
+    }
+
+    .pricing-temps_lines {
+      margin-block: 0.5rem;
+      border-bottom: var(--border-width) solid var(--border);
+      & li {
+        padding: 0.75rem 0;
+        border-top: var(--border-width) solid var(--border);
+        font-size: 1rem;
+        line-height: 1.4;
+      }
+    }
+
+    .pricing-temps_pack {
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: var(--text-2);
+      & strong {
+        color: var(--text);
+      }
+      & a {
+        color: var(--brand-500);
+        font-weight: var(--primary-semibold);
+        text-decoration: underline;
+        text-underline-offset: 0.25em;
+      }
+    }
+  }
+</style>

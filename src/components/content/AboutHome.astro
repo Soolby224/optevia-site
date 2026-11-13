@@ -1,4 +1,5 @@
 ---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Button from "@/components/Button.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Icon from "@/components/media/Icon.astro";
@@ -34,12 +35,8 @@ const items = [
     <Button element="link" href="/a-propos" arrow>Découvrir Optevia</Button>
   </div>
 
-  <div
-    class="about-home_photo"
-    role="img"
-    aria-label="Photo : un artisan au travail sur un toit"
-  >
-    <span>[Photo : un artisan au travail, lumière naturelle]</span>
+  <div class="about-home_photo">
+    <PhotoSlot alt="Un artisan au travail sur un toit, lumière naturelle" radius="main" />
   </div>
 
   <div class="about-home_list">
@@ -95,15 +92,6 @@ const items = [
 
     .about-home_photo {
       min-height: 26.25rem;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-end;
-      padding: 1rem;
-      border-radius: var(--radius-main);
-      background-color: var(--light-300);
-      font-size: 0.75rem;
-      color: var(--dark-500);
-      text-align: right;
       @media (width < 43.75rem) {
         min-height: 16.25rem;
       }

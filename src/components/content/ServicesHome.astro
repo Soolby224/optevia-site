@@ -1,4 +1,5 @@
 ---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Button from "@/components/Button.astro";
 
@@ -44,11 +45,10 @@ const services = [
   <div class="services-home_list">
     {services.map((service) => (
       <article class="services-home_card">
-        <div
-          class="services-home_photo"
-          role="img"
-          aria-label={`Emplacement image : ${service.photo}`}
-        >
+        <div class="services-home_photo">
+          <div class="services-home_media">
+            <PhotoSlot alt={service.photo} radius="small" />
+          </div>
           <span class="services-home_tile" aria-hidden="true">
             {service.icon === "home" ? (
               <svg viewBox="0 0 24 24">
@@ -62,7 +62,6 @@ const services = [
               </svg>
             )}
           </span>
-          <span class="services-home_photo_label">[Photo : {service.photo}]</span>
         </div>
         <h3 class="services-home_title">{service.title}</h3>
         <p class="services-home_accroche">{service.accroche}</p>
@@ -120,16 +119,13 @@ const services = [
       transition: transform 300ms var(--hover-ease);
     }
 
-    .services-home_photo_label {
+    .services-home_media {
       position: absolute;
-      inset: 0.875rem 1rem auto;
-      text-align: right;
-      font-size: 0.75rem;
-      line-height: 1.4;
-      color: var(--dark-500);
+      inset: 0;
     }
 
     .services-home_tile {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;

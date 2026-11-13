@@ -1,6 +1,19 @@
 ---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Button from "@/components/Button.astro";
+
+interface Props {
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  /** Text under the heading. Empty hides it. */
+  lead?: string;
+}
+
+const {
+  id = "resources-home-title",
+  lead = "Des guides pour être trouvé dans votre ville et conseillé par les IA, écrits pour les artisans et entreprises de l’habitat.",
+} = Astro.props;
 
 const featured = {
   tag: "Guide IA",
@@ -19,19 +32,16 @@ const articles = [
 
 <div class="resources-home_wrap">
   <div class="resources-home_head">
-    <Heading id="resources-home-title" class="heading-accent">
-      Nos ressources,<br /><strong>pour être vu partout.</strong>
+    <Heading id={id} class="heading-accent">
+      <slot>Nos ressources,<br /><strong>pour être vu partout.</strong></slot>
     </Heading>
-    <p class="resources-home_lead">
-      Des guides pour être trouvé dans votre ville et conseillé par les IA,
-      écrits pour les artisans et entreprises de l’habitat.
-    </p>
+    {lead && <p class="resources-home_lead">{lead}</p>}
   </div>
 
   <div class="resources-home_layout">
     <a href={featured.href} class="resources-home_featured">
-      <div class="resources-home_featured_img" role="img" aria-label="Emplacement image du guide">
-        [Visuel du guide]
+      <div class="resources-home_featured_img">
+        <PhotoSlot alt={`Visuel du guide : ${featured.title}`} />
       </div>
       <div class="resources-home_featured_body">
         <span class="resources-home_badge">{featured.tag}</span>
@@ -43,7 +53,9 @@ const articles = [
     <div class="resources-home_list">
       {articles.map((article) => (
         <a href={article.href} class="resources-home_article">
-          <span class="resources-home_thumb" role="img" aria-label="Emplacement image de l’article" />
+          <span class="resources-home_thumb">
+            <PhotoSlot tag="span" alt="" radius="button" />
+          </span>
           <span class="resources-home_article_body">
             <span class="resources-home_article_tag">{article.tag}</span>
             <h3 class="resources-home_article_title">{article.title}</h3>
@@ -171,9 +183,8 @@ const articles = [
     }
 
     .resources-home_thumb {
+      display: block;
       aspect-ratio: 16 / 10;
-      border-radius: var(--radius-button);
-      background-color: var(--dark-800);
     }
 
     .resources-home_article_body {

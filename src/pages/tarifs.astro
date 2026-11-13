@@ -1,0 +1,89 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroPage from "@/components/content/HeroPage.astro";
+import SectionHead from "@/components/content/SectionHead.astro";
+import PricingTarifs from "@/components/content/PricingTarifs.astro";
+import PackTarifs from "@/components/content/PackTarifs.astro";
+import ChoiceTarifs from "@/components/content/ChoiceTarifs.astro";
+import FaqHome from "@/components/content/FaqHome.astro";
+import ResourcesHome from "@/components/content/ResourcesHome.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+
+const faq = [
+  { question: "Les prix sont-ils HT ou TTC ?", answer: "[À valider : HT ou TTC.]" },
+  {
+    question: "Y a-t-il un engagement ?",
+    answer: "Non. Les abonnements s’arrêtent quand vous voulez, et le site reste à vous.",
+  },
+  {
+    question: "Et après la première année, pour le site ?",
+    answer: "Le nom de domaine et l’hébergement sont offerts la première année. Ensuite, ils coûtent [XX] € par an.",
+  },
+  {
+    question: "Qu’est-ce qui fait varier le prix du site ?",
+    answer: "[À valider : nombre de pages, options.] Le montant exact vous est donné après l’audit gratuit.",
+  },
+  {
+    question: "Je peux prendre un seul service ?",
+    answer: "Oui, chacun se prend seul. Le pack est simplement plus avantageux si vous voulez la visibilité et Gagner du temps.",
+  },
+];
+---
+
+<Layout
+  type="website"
+  title="Tarifs"
+  description="Les tarifs Optevia : site internet dès 597 € payés une fois, visibilité Google et IA au mois, automatisations à 150 €/mois, pack à 197 €/mois. Sans engagement."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small" paddingBottom="small">
+    <HeroPage
+      title="Tarifs Optevia : site internet, visibilité Google et automatisations pour artisans"
+      lead="Le site se paie une fois et vous appartient. La visibilité et Gagner du temps se paient au mois, sans engagement."
+      breadcrumb={[{ label: "Accueil", href: "/" }, { label: "Tarifs" }]}
+    >
+      Trois prix.<br /><span>Un seul pack.</span>
+    </HeroPage>
+  </Section>
+
+  <!-- Les prix -->
+  <Section id="prix" aria-labelledby="pricing-tarifs-title" class="background-2">
+    <SectionHead id="pricing-tarifs-title">Ce que comprend chaque prix.</SectionHead>
+    <PricingTarifs />
+  </Section>
+
+  <!-- Le pack -->
+  <Section aria-labelledby="pack-tarifs-title">
+    <PackTarifs />
+  </Section>
+
+  <!-- Par où commencer -->
+  <Section aria-labelledby="choice-tarifs-title" paddingTop="none">
+    <ChoiceTarifs />
+  </Section>
+
+  <!-- FAQ sur les prix -->
+  <Section aria-labelledby="faq-tarifs-title" class="background-2">
+    <FaqHome items={faq} id="faq-tarifs-title" eyebrow="" lead="" ctaLabel="">Sur les prix.</FaqHome>
+  </Section>
+
+  <!-- Ressources -->
+  <Section id="ressources" aria-labelledby="resources-home-title" theme="dark">
+    <ResourcesHome lead="Des guides gratuits pour avancer seul, avant de nous parler.">
+      Vous hésitez encore ?<br /><strong>Commencez par lire.</strong>
+    </ResourcesHome>
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title">
+    <CtaBand
+      variant="brand"
+      text="L’audit gratuit vous dit par quoi commencer, et combien ça coûte."
+      secondary="whatsapp"
+      secondaryLabel="Ou sur WhatsApp"
+    >
+      Un doute sur ce qu’il vous faut ?
+    </CtaBand>
+  </Section>
+</Layout>

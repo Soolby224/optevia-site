@@ -1,0 +1,40 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroPage from "@/components/content/HeroPage.astro";
+import ListBlog from "@/components/content/ListBlog.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+---
+
+<Layout
+  type="website"
+  title="Blog"
+  description="Le blog Optevia : des conseils concrets pour les artisans de l’habitat sur la fiche Google, le référencement local, les IA, les avis clients et le site internet."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small" paddingBottom="small">
+    <HeroPage
+      title="Blog Optevia : conseils de visibilité sur Google pour les artisans"
+      lead="Des conseils concrets pour les artisans de l’habitat. Un sujet par article, lisible en cinq minutes."
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Ressources", href: "/#ressources" },
+        { label: "Blog" },
+      ]}
+    >
+      Le blog.<br /><span>Être trouvé, sans jargon.</span>
+    </HeroPage>
+  </Section>
+
+  <!-- Articles -->
+  <Section aria-label="Articles" paddingTop="none">
+    <ListBlog />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand secondary="whatsapp">
+      Vous préférez qu’on regarde<br /><strong>votre cas directement ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

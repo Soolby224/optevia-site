@@ -1,4 +1,5 @@
 ---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Button from "@/components/Button.astro";
 import Icon from "@/components/media/Icon.astro";
@@ -99,12 +100,8 @@ const audiences = [
             {audience.cta}
           </Button>
         </div>
-        <div
-          class="audience-home_photo"
-          role="img"
-          aria-label={`Emplacement photo : ${audience.photo}`}
-        >
-          [Photo : {audience.photo}]
+        <div class="audience-home_photo">
+          <PhotoSlot alt={audience.photo} radius="small" />
         </div>
       </div>
     ))}

@@ -1,0 +1,98 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import { slotContent } from "@/utils/slots.ts";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  /** Small label above the heading. */
+  eyebrow?: string;
+  /** Text shown with the heading. */
+  text?: string;
+  /** Layout: text beside the heading, everything centered, or stacked at the start. */
+  variant?: "split" | "centered" | "stack";
+  /** Heading level. */
+  tag?: "h1" | "h2" | "h3";
+  class?: string;
+}
+
+const {
+  render = true,
+  id,
+  eyebrow,
+  text,
+  variant = "split",
+  tag = "h2",
+  class: className,
+} = Astro.props;
+
+const title = await slotContent(Astro.slots);
+const actions = await slotContent(Astro.slots, "actions");
+---
+
+{render && title && (
+  <div class:list={["section-head_wrap", variant !== "split" && variant, className]}>
+    <div class="section-head_title">
+      {eyebrow && <p class="section-head_eyebrow">{eyebrow}</p>}
+      <Heading id={id} tag={tag} variant="h2" class="heading-accent">
+        <Fragment set:html={title} />
+      </Heading>
+    </div>
+    {(text || actions) && (
+      <div class="section-head_side">
+        {text && <p class="section-head_text">{text}</p>}
+        <Fragment set:html={actions} />
+      </div>
+    )}
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .section-head_wrap {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.25rem 3rem;
+      &.centered {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        & .section-head_side,
+        & .section-head_title {
+          align-items: center;
+        }
+      }
+      &.stack {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    .section-head_title,
+    .section-head_side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      min-width: 0;
+    }
+
+    .section-head_eyebrow {
+      font-size: 0.875rem;
+      font-weight: var(--primary-medium);
+      color: var(--text-3);
+    }
+
+    .section-head_text {
+      max-width: 32.5rem;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+  }
+</style>

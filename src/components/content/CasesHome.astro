@@ -1,4 +1,5 @@
 ---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Button from "@/components/Button.astro";
 import Icon from "@/components/media/Icon.astro";
@@ -36,11 +37,25 @@ const cases = [
     photo: "Électricien devant son camion",
   },
 ];
+
+interface Props {
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  /**
+   * Number of case studies shown.
+   *
+   * @min 1
+   * @int
+   */
+  limit?: number;
+}
+
+const { id = "cases-home-title", limit = cases.length } = Astro.props;
 ---
 
 <div class="cases-home_wrap">
   <div class="cases-home_head">
-    <Heading id="cases-home-title" class="heading-accent">
+    <Heading id={id} class="heading-accent">
       Chaque projet,<br /><strong>se mesure à ses résultats.</strong>
     </Heading>
     <Button element="link" variant="link" href="/realisations" arrow>
@@ -49,14 +64,10 @@ const cases = [
   </div>
 
   <div class="cases-home_list">
-    {cases.map((item, index) => (
+    {cases.slice(0, limit).map((item, index) => (
       <div class:list={["cases-home_row", index % 2 === 1 && "is-reversed"]}>
-        <div
-          class="cases-home_photo"
-          role="img"
-          aria-label={`Emplacement photo : ${item.photo}`}
-        >
-          [Photo : {item.photo}]
+        <div class="cases-home_photo">
+          <PhotoSlot alt={item.photo} radius="small" />
         </div>
         <a href="/realisations" class="cases-home_card">
           <span class="cases-home_tag">{item.tag}</span>

@@ -1,0 +1,53 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import { METIERS, metierHref } from "@/data/metiers.ts";
+---
+
+<div class="trades-guides_wrap">
+  <Heading id="trades-guides-title" class="heading-accent">
+    Par métier.<br /><strong>Ce qui marche chez vous.</strong>
+  </Heading>
+  <ul class="trades-guides_list">
+    {METIERS.map((metier) => (
+      <li><a href={metierHref(metier.slug)}>{metier.name}</a></li>
+    ))}
+  </ul>
+</div>
+
+<style is:global>
+  @layer components {
+    .trades-guides_wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .trades-guides_list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(1.5rem, 3vw, 2.5rem);
+      border-top: var(--border-width) solid var(--border);
+      @media (width < 30rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      & a {
+        display: flex;
+        align-items: center;
+        min-height: 3.5rem;
+        border-bottom: var(--border-width) solid var(--border);
+        font-size: 1.125rem;
+        font-weight: var(--primary-medium);
+        color: var(--text);
+        transition: color var(--hover-duration) var(--hover-ease);
+        &:hover {
+          color: var(--coral-500);
+        }
+      }
+    }
+  }
+</style>

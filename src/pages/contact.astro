@@ -1,0 +1,28 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import BookingContact from "@/components/content/BookingContact.astro";
+import TestimonialsHome from "@/components/content/TestimonialsHome.astro";
+import ResourcesHome from "@/components/content/ResourcesHome.astro";
+---
+
+<Layout
+  type="website"
+  title="Contact et audit gratuit"
+  description="Réservez un appel de 20 minutes avec Optevia, sur WhatsApp ou Google Meet : on regarde votre visibilité sur Google et dans les IA, puis on vous envoie un plan clair avec les prix."
+>
+  <!-- Réservation -->
+  <Section id="audit" aria-labelledby="booking-contact-title" paddingTop="small">
+    <BookingContact />
+  </Section>
+
+  <!-- Avis -->
+  <Section id="avis" aria-labelledby="testimonials-home-title">
+    <TestimonialsHome />
+  </Section>
+
+  <!-- Ressources -->
+  <Section id="ressources" aria-labelledby="resources-home-title" theme="dark">
+    <ResourcesHome lead="" />
+  </Section>
+</Layout>

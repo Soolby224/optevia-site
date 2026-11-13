@@ -1,18 +1,22 @@
 ---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Button from "@/components/Button.astro";
 import { CONTACT } from "@/consts.ts";
 
 interface Props {
   /** SEO heading, small, above the tagline. */
   title?: string;
+  /** Text beside the tagline. */
+  text?: string;
   /** Description of the hero photo. */
   photo?: string;
-  /** Platforms listed under the hero. */
+  /** Platforms listed under the hero. An empty list hides the band. */
   platforms?: string[];
 }
 
 const {
   title = "Agence de visibilité pour les artisans et entreprises de l’habitat",
+  text = "Optevia aide les artisans à être trouvés sur Google, sur Google Maps et dans les réponses des IA comme ChatGPT. Site internet, fiche Google et automatisations, sans engagement longue durée.",
   photo = "Un artisan sur un chantier, plan large, lumière naturelle",
   platforms = ["Google", "Google Maps", "ChatGPT", "Gemini", "Perplexity", "Bing"],
 } = Astro.props;
@@ -20,24 +24,20 @@ const {
 
 <div class="hero-home_wrap">
   <div class="hero-home_frame">
-    <div class="hero-home_photo" role="img" aria-label={`Photo : ${photo}`}>
-      <span>[Photo : {photo}]</span>
+    <div class="hero-home_photo">
+      <PhotoSlot alt={photo} radius="large" eager />
     </div>
     <div class="hero-home_card">
       <div class="hero-home_titles">
         <h1 id="hero-home-title" class="hero-home_seo">{title}</h1>
         <p class="hero-home_tagline">
-          Votre savoir‑faire<br /><span>mérite d’être vu.</span>
+          <slot>Votre savoir‑faire<br /><span>mérite d’être vu.</span></slot>
         </p>
       </div>
       <div class="hero-home_body">
-        <p class="hero-home_text">
-          Optevia aide les artisans à être trouvés sur Google, sur Google Maps
-          et dans les réponses des IA comme ChatGPT. Site internet, fiche Google
-          et automatisations, sans engagement longue durée.
-        </p>
+        <p class="hero-home_text">{text}</p>
         <div class="hero-home_actions">
-          <Button element="link" href="/#audit" arrow>Audit gratuit</Button>
+          <Button element="link" href="/contact" arrow>Audit gratuit</Button>
           <Button
             element="link"
             href={CONTACT.whatsapp}
@@ -52,14 +52,16 @@ const {
     </div>
   </div>
 
+  {platforms.length > 0 && (
   <div class="hero-home_platforms">
-    <p class="hero-home_platforms_title">
-      On vous rend visible là où vos clients cherchent
-    </p>
-    <ul class="hero-home_platforms_list">
-      {platforms.map((name) => <li>{name}</li>)}
-    </ul>
-  </div>
+      <p class="hero-home_platforms_title">
+        On vous rend visible là où vos clients cherchent
+      </p>
+      <ul class="hero-home_platforms_list">
+        {platforms.map((name) => <li>{name}</li>)}
+      </ul>
+    </div>
+  )}
 </div>
 
 <style is:global>
@@ -74,14 +76,6 @@ const {
 
     .hero-home_photo {
       height: clamp(35rem, 74vh, 47.5rem);
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-end;
-      padding: 1.75rem clamp(1rem, 4vw, 3rem);
-      border-radius: var(--radius-large);
-      background-color: var(--light-300);
-      font-size: 0.8125rem;
-      color: var(--dark-500);
       @media (width < 47.5rem) {
         height: 44vh;
         min-height: 18.75rem;

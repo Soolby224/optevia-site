@@ -1,0 +1,163 @@
+---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
+import Icon from "@/components/media/Icon.astro";
+import play from "@/assets/icons/play.svg";
+
+const pillars = [
+  {
+    title: "Notre mission",
+    text: "Faire trouver les artisans par les clients de leur ville : sur Google, sur Google Maps et dans les réponses des IA comme ChatGPT. Puis leur faire gagner du temps pour qu’aucun de ces clients ne leur échappe.",
+  },
+  {
+    title: "Notre vision",
+    text: "Un artisan qui fait du bon travail ne devrait jamais perdre un chantier parce qu’un concurrent est mieux placé sur Google. La visibilité doit suivre la qualité du travail.",
+  },
+  {
+    title: "Nos valeurs",
+    text: "Des prix affichés et sans engagement longue durée. Un site qui vous appartient. Des mots simples, sans jargon. Et une seule spécialité : l’habitat.",
+  },
+];
+---
+
+<div class="story-about_wrap">
+  <figure class="story-about_video">
+    <PhotoSlot alt="Vidéo : le fondateur présente Optevia, 1 à 2 minutes" radius="large" />
+    {/* TODO : brancher la vidéo de présentation (1 à 2 minutes). */}
+    <button type="button" class="story-about_play" aria-label="Lire la vidéo : le fondateur présente Optevia">
+      <Icon src={play} variant="medium" />
+    </button>
+    <figcaption class="story-about_caption">
+      <p>
+        <b>[Prénom Nom]</b>, fondateur d’Optevia, explique pourquoi l’agence
+        s’est spécialisée dans l’habitat.
+      </p>
+      <span>[durée]</span>
+    </figcaption>
+  </figure>
+
+  <div class="story-about_list">
+    {pillars.map((pillar, index) => (
+      <article class="story-about_card">
+        <span class="story-about_number">{String(index + 1).padStart(2, "0")}</span>
+        <h3 class="story-about_title">{pillar.title}</h3>
+        <p class="story-about_text">{pillar.text}</p>
+      </article>
+    ))}
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .story-about_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.75rem, 3vw, 3rem);
+    }
+
+    .story-about_video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @media (width < 37.5rem) {
+        aspect-ratio: auto;
+        min-height: 22.5rem;
+      }
+      & > .photo-slot_wrap {
+        position: absolute;
+        inset: 0;
+      }
+    }
+
+    .story-about_play {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 5.5rem;
+      height: 5.5rem;
+      border-radius: var(--radius-round);
+      background-color: var(--brand-500);
+      color: var(--dark-900);
+      font-size: 1.5rem;
+      box-shadow: 0 0.75rem 2rem -0.75rem rgb(17 17 17 / 0.35);
+      transition: background-color var(--hover-duration) var(--hover-ease);
+      &:hover {
+        background-color: var(--brand-600);
+      }
+      @media (width < 37.5rem) {
+        width: 4.5rem;
+        height: 4.5rem;
+        margin-bottom: 6rem;
+      }
+    }
+
+    .story-about_caption {
+      position: absolute;
+      inset: auto clamp(1rem, 2.4vw, 1.75rem) clamp(1rem, 2.4vw, 1.75rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.25rem 1rem;
+      padding: 0.875rem 1.125rem;
+      border-radius: var(--radius-main);
+      background-color: var(--light-100);
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: var(--text-2);
+      & b {
+        font-weight: var(--primary-semibold);
+        color: var(--text);
+      }
+      & span {
+        flex: none;
+        font-size: 0.8125rem;
+        font-weight: var(--primary-medium);
+        color: var(--text-3);
+      }
+      @media (width < 37.5rem) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    .story-about_list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1rem, 2vw, 1.5rem);
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .story-about_card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: clamp(1.5rem, 2.6vw, 2rem);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+      background-color: var(--light-100);
+    }
+
+    .story-about_number {
+      font-size: 0.875rem;
+      font-weight: var(--primary-semibold);
+      color: var(--coral-500);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .story-about_title {
+      font-size: 1.375rem;
+      letter-spacing: -0.015em;
+    }
+
+    .story-about_text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+  }
+</style>

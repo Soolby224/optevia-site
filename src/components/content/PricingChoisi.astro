@@ -1,0 +1,169 @@
+---
+import Button from "@/components/Button.astro";
+
+type Line = string | { label: string; offer: string };
+
+const site: Line[] = [
+  "Identité visuelle comprise : logo et couleurs",
+  "Pages services, zones d’intervention et réalisations",
+  "Formulaire de devis et appel en un clic",
+  { label: "Nom de domaine et hébergement", offer: "offerts 1 an" },
+  { label: "Maintenance", offer: "offerte 6 mois" },
+  { label: "Formation pour gérer votre site", offer: "offerte" },
+  "Le site vous appartient, à 100 %",
+];
+
+const visibility: Line[] = [
+  "Fiche Google optimisée et suivie",
+  "Sortir dans la première page dans votre ville",
+  "Être conseillé par ChatGPT et les IA",
+  "Un compte rendu clair chaque mois",
+  "Système de récolte d’avis",
+];
+---
+
+<div class="pricing-choisi_wrap">
+  <div class="pricing-choisi_list">
+    <article class="pricing-choisi_card">
+      <p class="pricing-choisi_when">Une seule fois</p>
+      <h3 class="pricing-choisi_title">Votre site internet</h3>
+      <p class="pricing-choisi_lead">Un site qui vous ressemble et qui donne envie d’appeler.</p>
+      <p class="pricing-choisi_price"><span>à partir de</span>597 €</p>
+      <p class="pricing-choisi_mention">Paiement unique. Aucun abonnement pour le site.</p>
+      <ul class="pricing-choisi_lines">
+        {site.map((line) =>
+          typeof line === "string" ? <li>{line}</li> : <li>{line.label} <em>{line.offer}</em></li>,
+        )}
+      </ul>
+      <div class="pricing-choisi_action">
+        <Button element="link" href="/contact" emphasis="secondary" arrow>Demander un devis</Button>
+      </div>
+    </article>
+
+    <article class="pricing-choisi_card theme-dark">
+      <p class="pricing-choisi_when">Chaque mois</p>
+      <h3 class="pricing-choisi_title">Votre visibilité</h3>
+      <p class="pricing-choisi_lead">Qu’on vous trouve sur Google, sur Maps et dans les IA.</p>
+      <p class="pricing-choisi_price">60 €<small>/mois</small></p>
+      <p class="pricing-choisi_mention">Sans engagement longue durée.</p>
+      <ul class="pricing-choisi_lines">
+        {visibility.map((line) => <li>{line}</li>)}
+      </ul>
+      <div class="pricing-choisi_action">
+        <Button element="link" href="/contact" arrow>Commencer par l’audit gratuit</Button>
+      </div>
+    </article>
+  </div>
+  <p class="pricing-choisi_note">
+    Prix [HT]. Le prix du site dépend du nombre de pages, montant exact donné
+    après l’audit gratuit.
+  </p>
+</div>
+
+<style is:global>
+  @layer components {
+    .pricing-choisi_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .pricing-choisi_list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pricing-choisi_card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      padding: clamp(1.5rem, 3.4vw, 2.75rem);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+    }
+
+    .pricing-choisi_when {
+      font-size: 0.875rem;
+      font-weight: var(--primary-semibold);
+      color: var(--tag-text);
+    }
+
+    .pricing-choisi_title {
+      font-size: clamp(1.625rem, 2.6vw, 2.25rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .pricing-choisi_lead {
+      font-size: 1.0625rem;
+      line-height: 1.5;
+      color: var(--text-2);
+    }
+
+    .pricing-choisi_price {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.25rem 0.625rem;
+      margin-top: 0.5rem;
+      font-size: clamp(3.25rem, 6vw, 5rem);
+      font-weight: var(--primary-semibold);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      & span,
+      & small {
+        font-size: 1rem;
+        font-weight: var(--primary-medium);
+        letter-spacing: 0;
+        color: var(--text-3);
+      }
+    }
+
+    .pricing-choisi_mention {
+      font-size: 0.9375rem;
+      font-weight: var(--primary-medium);
+      color: var(--tag-text);
+    }
+
+    .pricing-choisi_lines {
+      display: flex;
+      flex-direction: column;
+      margin-top: 0.5rem;
+      border-bottom: var(--border-width) solid var(--border);
+      & li {
+        padding: 0.75rem 0;
+        border-top: var(--border-width) solid var(--border);
+        font-size: 1rem;
+        line-height: 1.4;
+      }
+      & em {
+        display: inline-block;
+        margin-left: 0.375rem;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        background-color: var(--brand-500);
+        color: var(--dark-900);
+        font-size: 0.8125rem;
+        font-style: normal;
+        font-weight: var(--primary-semibold);
+      }
+    }
+
+    .pricing-choisi_action {
+      display: flex;
+      flex-direction: column;
+      margin-top: auto;
+      padding-top: 0.75rem;
+    }
+
+    .pricing-choisi_note {
+      font-size: 0.875rem;
+      color: var(--text-3);
+    }
+  }
+</style>

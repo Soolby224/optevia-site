@@ -1,0 +1,133 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Button from "@/components/Button.astro";
+import ServiceHero from "@/components/content/ServiceHero.astro";
+import SectionHead from "@/components/content/SectionHead.astro";
+import CalculatorTemps from "@/components/content/CalculatorTemps.astro";
+import AutomationsTemps from "@/components/content/AutomationsTemps.astro";
+import SystemTemps from "@/components/content/SystemTemps.astro";
+import MomentTemps from "@/components/content/MomentTemps.astro";
+import PricingTemps from "@/components/content/PricingTemps.astro";
+import FaqHome from "@/components/content/FaqHome.astro";
+import OtherService from "@/components/content/OtherService.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+
+const faq = [
+  {
+    question: "C’est compliqué à utiliser ?",
+    answer:
+      "Non. Vous avez une application sur votre téléphone, comme une messagerie. On vous montre tout lors de la mise en service, et on reste joignables.",
+  },
+  {
+    question: "Mes clients vont voir que c’est automatique ?",
+    answer:
+      "Les messages sont écrits avec vos mots, signés de votre nom, et envoyés au bon moment. Ils ressemblent à ce que vous auriez écrit si vous aviez eu le temps.",
+  },
+  {
+    question: "Je dois changer de numéro de téléphone ?",
+    answer:
+      "[À valider avec Optevia : explication simple de la façon dont les appels manqués sont détectés et du numéro utilisé.]",
+  },
+  {
+    question: "Je peux arrêter quand je veux ?",
+    answer: "Oui, il n’y a pas d’engagement longue durée.",
+  },
+  {
+    question: "Je débute, est-ce utile ?",
+    answer:
+      "Pas tout de suite. Si vous recevez encore peu de demandes, commencez par Être choisi. On mettra l’outil en place quand le téléphone sonnera plus souvent.",
+  },
+];
+---
+
+<Layout
+  type="website"
+  title="Gagner du temps : automatisations et avis Google"
+  description="L’outil d’Optevia envoie un SMS après chaque appel manqué, relance vos devis et demande automatiquement les avis Google. 150 € par mois, sans engagement longue durée."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="service-hero-title" paddingTop="small">
+    <ServiceHero
+      title="Automatisation pour artisans : SMS après appel manqué, relance des devis et avis Google automatiques"
+      text="Pendant que vous êtes sur le chantier, l’outil d’Optevia envoie un SMS après chaque appel manqué, relance vos devis et demande automatiquement les avis Google. 150 € par mois."
+      photo="Un artisan sur un toit, son téléphone sonne dans sa poche"
+      label="Gagner du temps · e‑réputation"
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Services", href: "/#services" },
+        { label: "Gagner du temps et e‑réputation" },
+      ]}
+    >
+      Plus un appel raté.<br /><span>Plus un devis oublié.</span>
+      <Fragment slot="actions">
+        <Button element="link" href="/contact" arrow>Demander une démo</Button>
+        <Button element="link" href="#calcul" emphasis="secondary" arrow>Estimer ce que je perds</Button>
+      </Fragment>
+    </ServiceHero>
+  </Section>
+
+  <!-- Calculateur de pertes -->
+  <Section id="calcul" aria-labelledby="calculator-temps-title" theme="dark">
+    <CalculatorTemps />
+  </Section>
+
+  <!-- Ce qui tourne tout seul -->
+  <Section id="automatisations" aria-labelledby="automations-temps-title">
+    <AutomationsTemps />
+  </Section>
+
+  <!-- Un seul système -->
+  <Section id="systeme" aria-labelledby="system-temps-title" class="background-2">
+    <SystemTemps />
+  </Section>
+
+  <!-- Le bon moment -->
+  <Section id="moment" aria-labelledby="moment-title">
+    <SectionHead id="moment-title">
+      Ce n’est pas pour tout le monde.<br /><strong>Et on préfère vous le dire.</strong>
+    </SectionHead>
+    <MomentTemps />
+  </Section>
+
+  <!-- Qui fait quoi et tarif -->
+  <Section id="tarif" aria-labelledby="pricing-temps-title" class="background-2">
+    <PricingTemps />
+  </Section>
+
+  <!-- FAQ du service -->
+  <Section id="faq-service" aria-labelledby="faq-service-title">
+    <FaqHome
+      items={faq}
+      id="faq-service-title"
+      eyebrow="FAQ · Gagner du temps"
+      lead="Une autre question ? Appelez-nous, tout simplement."
+      ctaLabel=""
+    >
+      Les questions<br /><strong>qu’on nous pose.</strong>
+    </FaqHome>
+  </Section>
+
+  <!-- L’autre service -->
+  <Section aria-labelledby="other-service-title" paddingTop="none" paddingBottom="none">
+    <OtherService
+      href="/etre-choisi"
+      text="Un site qui donne confiance, votre fiche Google au top, sortir en premier dans votre ville et être conseillé par ChatGPT. C’est ce qui fait sonner le téléphone."
+      pricePrefix="site dès"
+      price="597 €"
+      cta="Découvrir Être choisi"
+    >
+      Être choisi.<br /><strong>Qu’on vous trouve d’abord.</strong>
+    </OtherService>
+  </Section>
+
+  <!-- Démo -->
+  <Section id="demo" aria-labelledby="cta-band-title">
+    <CtaBand
+      text="On vous montre l’outil en vingt minutes, avec vos vrais messages. Si ce n’est pas le bon moment pour vous, on vous le dit."
+      ctaLabel="Demander une démo"
+    >
+      Combien d’appels<br /><strong>avez-vous ratés cette semaine ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

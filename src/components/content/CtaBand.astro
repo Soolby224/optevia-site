@@ -1,0 +1,108 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+import { CONTACT } from "@/consts.ts";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  /** Text under the heading. */
+  text?: string;
+  /** Button label. */
+  ctaLabel?: string;
+  /** Button destination. */
+  ctaHref?: string;
+  /** Quiet link beside the button. */
+  secondary?: "none" | "phone" | "whatsapp";
+  /** Label of the quiet link. Defaults to the phone number or a WhatsApp prompt. */
+  secondaryLabel?: string;
+  /** Band colour: ink, or honey yellow. */
+  variant?: "dark" | "brand";
+  class?: string;
+}
+
+const {
+  render = true,
+  id = "cta-band-title",
+  text = "L’audit est gratuit : votre score sur 100 et les trois choses à corriger en premier.",
+  ctaLabel = "Demander mon audit gratuit",
+  ctaHref = "/contact",
+  secondary = "none",
+  secondaryLabel,
+  variant = "dark",
+  class: className,
+} = Astro.props;
+
+const secondaryHref =
+  secondary === "phone"
+    ? `tel:${CONTACT.phone.replace(/[^+\d]/g, "")}`
+    : CONTACT.whatsapp;
+const secondaryText =
+  secondaryLabel ??
+  (secondary === "phone"
+    ? `Ou appelez-nous au ${CONTACT.phone}`
+    : "Ou écrivez-nous sur WhatsApp");
+---
+
+{render && (
+  <div class:list={["cta-band_wrap", `theme-${variant}`, className]}>
+    <Heading id={id} class="heading-accent">
+      <slot>On commence<br /><strong>par votre audit gratuit ?</strong></slot>
+    </Heading>
+    {text && <p class="cta-band_text">{text}</p>}
+    <div class="cta-band_actions">
+      <Button element="link" href={ctaHref} arrow>{ctaLabel}</Button>
+      {secondary !== "none" && (
+        <a class="cta-band_link" href={secondaryHref} rel={secondary === "whatsapp" ? "noopener" : undefined}>
+          {secondaryText}
+        </a>
+      )}
+    </div>
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .cta-band_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 4.5rem);
+      border-radius: var(--radius-large);
+      text-align: center;
+      &.theme-brand .cta-band_text {
+        color: var(--text);
+      }
+    }
+
+    .cta-band_text {
+      max-width: 32.5rem;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .cta-band_actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem 1.5rem;
+    }
+
+    .cta-band_link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      font-weight: var(--primary-semibold);
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-thickness: 0.125rem;
+      text-underline-offset: 0.3125rem;
+    }
+  }
+</style>

@@ -1,0 +1,215 @@
+---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
+import Icon from "@/components/media/Icon.astro";
+import arrowRight from "@/assets/icons/arrow-right.svg";
+import { ARTICLES, ARTICLE_THEMES, articleHref, themeLabel } from "@/data/articles.ts";
+
+const featured = ARTICLES.find((article) => article.featured);
+const articles = ARTICLES.filter((article) => !article.featured);
+---
+
+<div class="list-blog_wrap" data-blog>
+  {featured && (
+    <a class="list-blog_featured" href={articleHref(featured.slug)}>
+      <span class="list-blog_featured_photo">
+        <PhotoSlot tag="span" alt={`Image de l’article : ${featured.title}`} radius="main" eager />
+      </span>
+      <span class="list-blog_featured_content">
+        <span class="list-blog_meta">
+          <b>À la une · {themeLabel(featured.theme)}</b> · {featured.minutes} min · [Date]
+        </span>
+        <h2 class="list-blog_featured_title">{featured.title}</h2>
+        <span class="list-blog_more">
+          Lire l’article
+          <Icon src={arrowRight} variant="small" />
+        </span>
+      </span>
+    </a>
+  )}
+
+  <div class="list-blog_filters" role="group" aria-label="Filtrer les articles par thème">
+    <button type="button" class="list-blog_filter" data-filter="all" aria-pressed="true">Tous</button>
+    {ARTICLE_THEMES.map((theme) => (
+      <button type="button" class="list-blog_filter" data-filter={theme.id} aria-pressed="false">
+        {theme.label}
+      </button>
+    ))}
+  </div>
+
+  <div class="list-blog_list" aria-live="polite">
+    {articles.map((article) => (
+      <a class="list-blog_card" href={articleHref(article.slug)} data-theme={article.theme}>
+        <span class="list-blog_photo">
+          <PhotoSlot tag="span" alt="" radius="small" />
+        </span>
+        <span class="list-blog_meta">
+          <b>{themeLabel(article.theme)}</b> · {article.minutes} min
+        </span>
+        <h3 class="list-blog_title">{article.title}</h3>
+      </a>
+    ))}
+    <p class="list-blog_empty" data-empty hidden>Pas encore d’article dans ce thème.</p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-blog]").forEach((root) => {
+    const filters = root.querySelectorAll<HTMLButtonElement>("[data-filter]");
+    const cards = root.querySelectorAll<HTMLElement>("[data-theme]");
+    const empty = root.querySelector<HTMLElement>("[data-empty]");
+    filters.forEach((filter) => {
+      filter.addEventListener("click", () => {
+        const theme = filter.dataset.filter;
+        let visible = 0;
+        filters.forEach((other) => other.setAttribute("aria-pressed", String(other === filter)));
+        cards.forEach((card) => {
+          const show = theme === "all" || card.dataset.theme === theme;
+          card.hidden = !show;
+          if (show) visible++;
+        });
+        if (empty) empty.hidden = visible > 0;
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  @layer components {
+    .list-blog_wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2rem, 4vw, 3.5rem);
+    }
+
+    .list-blog_featured {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 1.5rem clamp(2rem, 5vw, 4.5rem);
+      align-items: center;
+      color: var(--text);
+      &:hover .list-blog_more svg {
+        transform: translateX(0.25rem);
+      }
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .list-blog_featured_photo {
+      display: block;
+      aspect-ratio: 16 / 10;
+    }
+
+    .list-blog_featured_content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .list-blog_featured_title {
+      font-size: clamp(1.75rem, 3vw, 2.75rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .list-blog_meta {
+      font-size: 0.875rem;
+      color: var(--text-3);
+      & b {
+        font-weight: var(--primary-semibold);
+        color: var(--coral-500);
+      }
+    }
+
+    .list-blog_more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      min-height: 2.75rem;
+      font-weight: var(--primary-semibold);
+      text-decoration: underline;
+      text-decoration-color: var(--brand-500);
+      text-decoration-thickness: 0.125rem;
+      text-underline-offset: 0.3125rem;
+      & svg {
+        transition: transform var(--hover-duration) var(--hover-ease);
+      }
+    }
+
+    .list-blog_filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-top: clamp(1.5rem, 3vw, 2.5rem);
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    .list-blog_filter {
+      min-height: 2.75rem;
+      padding: 0.5rem 1rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-round);
+      background-color: var(--light-100);
+      font-size: 0.9375rem;
+      font-weight: var(--primary-medium);
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        border-color var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
+      &:hover {
+        border-color: var(--dark-900);
+      }
+      &[aria-pressed="true"] {
+        border-color: var(--dark-900);
+        background-color: var(--dark-900);
+        color: var(--light-100);
+      }
+    }
+
+    .list-blog_list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(2rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.5rem);
+      @media (width < 56.25rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      @media (width < 37.5rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .list-blog_card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 0;
+      color: var(--text);
+      &[hidden] {
+        display: none;
+      }
+      &:hover .list-blog_title {
+        color: var(--coral-500);
+      }
+    }
+
+    .list-blog_photo {
+      display: block;
+      aspect-ratio: 16 / 10;
+    }
+
+    .list-blog_title {
+      font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      transition: color var(--hover-duration) var(--hover-ease);
+    }
+
+    .list-blog_empty {
+      grid-column: 1 / -1;
+      font-size: 1.0625rem;
+      color: var(--text-2);
+    }
+  }
+</style>
