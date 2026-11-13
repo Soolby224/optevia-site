@@ -1,7 +1,8 @@
 ---
 import Heading from "@/components/typography/Heading.astro";
 import Icon from "@/components/media/Icon.astro";
-import arrowRight from "@/assets/icons/arrow-right.svg";
+import star from "@/assets/icons/ion/star.svg";
+import arrowRight from "@/assets/icons/ion/arrow-forward-outline.svg";
 
 type Automation = {
   when: string;
@@ -93,7 +94,9 @@ const automations: Automation[] = [
             {item.review && (
               <>
                 <p class="automations-temps_stars" role="img" aria-label="2 étoiles sur 5">
-                  <span>★★</span>★★★
+                  {[0, 1, 2, 3, 4].map((index) => (
+                    <Icon src={star} class={index < 2 ? "is-on" : undefined} />
+                  ))}
                 </p>
                 <p class="automations-temps_private">
                   <b>Dites-nous ce qui n’a pas été.</b>
@@ -322,10 +325,11 @@ const automations: Automation[] = [
     }
 
     .automations-temps_stars {
-      font-size: 1.5rem;
-      letter-spacing: 0.1em;
+      display: flex;
+      gap: 0.25rem;
+      font-size: 1rem;
       color: var(--sand-line);
-      & span {
+      & .is-on {
         color: var(--brand-500);
       }
     }

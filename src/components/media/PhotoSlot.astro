@@ -11,6 +11,8 @@ interface Props {
   src?: ImageMetadata | string;
   /** Rendered element. Use `span` inside a button or other phrasing content. */
   tag?: "div" | "span";
+  /** Shape: fill the parent, or a wide banner with its own ratio. */
+  ratio?: "fill" | "wide";
   /** Corner radius. */
   radius?: "none" | "button" | "small" | "main" | "large";
   /** Load the image immediately instead of lazily. */
@@ -23,6 +25,7 @@ const {
   alt,
   src = placeholder,
   tag: Tag = "div",
+  ratio = "fill",
   radius = "none",
   eager = false,
   class: className,
@@ -30,7 +33,7 @@ const {
 ---
 
 {render && (
-  <Tag class:list={["photo-slot_wrap", radius !== "none" && `is-${radius}`, className]}>
+  <Tag class:list={["photo-slot_wrap", ratio !== "fill" && ratio, radius !== "none" && `is-${radius}`, className]}>
     <Img
       src={src}
       alt={alt}
@@ -50,6 +53,13 @@ const {
       height: 100%;
       overflow: hidden;
       background-color: var(--background-3);
+      &.wide {
+        height: auto;
+        aspect-ratio: 21 / 9;
+        @media (width < 48rem) {
+          aspect-ratio: 16 / 10;
+        }
+      }
       &.is-button {
         border-radius: var(--radius-button);
       }

@@ -1,0 +1,108 @@
+---
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Steps of the story, one titled row per entry. */
+  story: { title: string; text: string }[];
+  /** Client quote. */
+  quote: string;
+  /** Pages of the services and trade behind the case. */
+  links: { label: string; href: string }[];
+  class?: string;
+}
+
+const { render = true, story, quote, links, class: className } = Astro.props;
+---
+
+{render && (
+  <div class:list={["story-cas_wrap", className]}>
+    <div class="story-cas_list">
+      {story.map((step) => (
+        <div class="story-cas_row">
+          <h2>{step.title}</h2>
+          <p>{step.text}</p>
+        </div>
+      ))}
+    </div>
+    <figure class="story-cas_quote">
+      <blockquote>« {quote} »</blockquote>
+      <figcaption><b>[Prénom Nom]</b>, [Entreprise]</figcaption>
+    </figure>
+    {links.length > 0 && (
+      <p class="story-cas_links">
+        Services utilisés :
+        {links.map((link, index) => (
+          <Fragment>
+            {index > 0 && " · "}
+            <a href={link.href}>{link.label}</a>
+          </Fragment>
+        ))}
+      </p>
+    )}
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .story-cas_wrap {
+      width: 100%;
+    }
+
+    .story-cas_row {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 0.75rem clamp(2rem, 5vw, 5rem);
+      padding: 1.75rem 0;
+      border-top: var(--border-width) solid var(--border);
+      @media (width < 48rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      & h2 {
+        font-size: clamp(1.375rem, 2vw, 1.75rem);
+        font-weight: var(--primary-semibold);
+        line-height: 1.2;
+        letter-spacing: -0.021em;
+      }
+      & p {
+        max-width: 40rem;
+        font-size: 1.125rem;
+        line-height: 1.65;
+        color: var(--text-2);
+      }
+    }
+
+    .story-cas_quote {
+      margin-top: clamp(3rem, 6vw, 5rem);
+      padding-left: 1.5rem;
+      border-left: 0.1875rem solid var(--brand-500);
+      & blockquote {
+        max-width: 57.5rem;
+        margin-bottom: 1rem;
+        font-size: clamp(1.625rem, 3vw, 2.5rem);
+        font-weight: var(--primary-semibold);
+        line-height: 1.2;
+        letter-spacing: -0.025em;
+      }
+      & figcaption {
+        color: var(--text-3);
+        & b {
+          color: var(--text);
+        }
+      }
+    }
+
+    .story-cas_links {
+      margin-top: 2rem;
+      color: var(--text-3);
+      & a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.75rem;
+        font-weight: var(--primary-semibold);
+        color: var(--text);
+        text-decoration: underline;
+        text-underline-offset: 0.25em;
+      }
+    }
+  }
+</style>

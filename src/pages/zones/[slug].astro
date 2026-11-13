@@ -1,0 +1,80 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import RichText from "@/components/typography/RichText.astro";
+import HeroPage from "@/components/content/HeroPage.astro";
+import TradesGuides from "@/components/content/TradesGuides.astro";
+import ServicesDuo from "@/components/content/ServicesDuo.astro";
+import RelatedLinks from "@/components/content/RelatedLinks.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+import { ZONES, zoneHref, type Zone } from "@/data/zones.ts";
+
+export function getStaticPaths() {
+  return ZONES.map((zone) => ({ params: { slug: zone.slug }, props: { zone } }));
+}
+
+interface Props {
+  zone: Zone;
+}
+
+const { zone } = Astro.props;
+
+const others = [
+  ...ZONES.filter((other) => other.slug !== zone.slug).map((other) => ({
+    label: other.name,
+    href: zoneHref(other.slug),
+  })),
+  { label: "Toutes les zones", href: "/zones" },
+];
+---
+
+<Layout
+  type="website"
+  title={`Site internet et référencement local pour artisans ${zone.where}`}
+  description={`Optevia accompagne les artisans et entreprises de l’habitat ${zone.where} (${zone.code}) : site internet, fiche Google, référencement local et visibilité dans les IA. Audit gratuit.`}
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small" paddingBottom="small">
+    <HeroPage
+      title={`Site internet et référencement local pour artisans ${zone.where} (${zone.code})`}
+      lead={`Quand un client cherche un artisan ${zone.where}, il appelle l’un des trois premiers. Optevia vous y emmène.`}
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Zones", href: "/zones" },
+        { label: zone.name },
+      ]}
+    >
+      {zone.name}.<br /><span>Soyez celui qu’on appelle.</span>
+    </HeroPage>
+  </Section>
+
+  <!-- Présentation de la zone -->
+  <Section aria-label={`Optevia ${zone.where}`} paddingTop="none">
+    <RichText maxWidth={70}>
+      <p>
+        [À compléter : les villes couvertes {zone.where}, ce que cherchent les clients sur place et
+        un exemple de client accompagné.]
+      </p>
+    </RichText>
+  </Section>
+
+  <!-- Par métier -->
+  <Section aria-labelledby="trades-guides-title" class="background-2">
+    <TradesGuides>
+      Par métier.<br /><strong>{zone.name}.</strong>
+    </TradesGuides>
+  </Section>
+
+  <!-- Les deux services -->
+  <Section aria-labelledby="services-duo-title">
+    <ServicesDuo>
+      Ce qu’on fait<br /><strong>{zone.where}.</strong>
+    </ServicesDuo>
+    <RelatedLinks label="Les autres zones" links={others} />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand secondary="phone" />
+  </Section>
+</Layout>

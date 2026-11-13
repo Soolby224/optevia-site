@@ -16,17 +16,17 @@ const {
 } = Astro.props;
 
 const featured = {
-  tag: "Guide IA",
+  tag: "IA",
   title: "Comment apparaître dans les réponses de ChatGPT quand on est artisan",
   text: "Ce que regardent les IA pour recommander une entreprise locale, et la méthode pour être cité.",
-  href: "/guides/ia",
+  href: "/blog/apparaitre-dans-chatgpt-artisan",
 };
 
 const articles = [
-  { tag: "Votre ville", title: "Fiche Google : les 10 réglages que la plupart des artisans oublient", href: "/blog" },
-  { tag: "IA", title: "Rédiger une FAQ que Google et les IA reprennent mot pour mot", href: "/blog" },
-  { tag: "Bonnes pratiques", title: "Avis clients : comment en obtenir plus, sans jamais les acheter", href: "/blog" },
-  { tag: "Votre ville", title: "Faut-il créer une page par ville sur son site ?", href: "/blog" },
+  { tag: "Votre ville", title: "Fiche Google : les 10 réglages que la plupart des artisans oublient", href: "/blog/fiche-google-10-reglages" },
+  { tag: "IA", title: "Comment les IA choisissent l’artisan qu’elles recommandent", href: "/blog/comment-ia-choisissent-artisan" },
+  { tag: "Bonnes pratiques", title: "Obtenir plus d’avis Google, sans jamais les acheter", href: "/blog/obtenir-plus-avis-google" },
+  { tag: "Votre ville", title: "Faut-il une page par ville sur son site ?", href: "/blog/une-page-par-ville" },
 ];
 ---
 
@@ -41,7 +41,7 @@ const articles = [
   <div class="resources-home_layout">
     <a href={featured.href} class="resources-home_featured">
       <div class="resources-home_featured_img">
-        <PhotoSlot alt={`Visuel du guide : ${featured.title}`} />
+        <PhotoSlot alt={`Image de l’article : ${featured.title}`} />
       </div>
       <div class="resources-home_featured_body">
         <span class="resources-home_badge">{featured.tag}</span>

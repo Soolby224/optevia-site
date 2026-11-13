@@ -1,0 +1,29 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Breadcrumb from "@/components/global/Breadcrumb.astro";
+import Heading from "@/components/typography/Heading.astro";
+import RichText from "@/components/typography/RichText.astro";
+import { LEGAL_PAGES, type LegalPage } from "@/data/legal.ts";
+
+export function getStaticPaths() {
+  return LEGAL_PAGES.map((page) => ({ params: { legal: page.slug }, props: { page } }));
+}
+
+interface Props {
+  page: LegalPage;
+}
+
+const { page } = Astro.props;
+---
+
+<Layout type="website" title={page.title} noindex>
+  <!-- Contenu légal -->
+  <Section aria-labelledby="legal-title" paddingTop="small" gap="6">
+    <Breadcrumb items={[{ label: "Accueil", href: "/" }, { label: page.title }]} />
+    <Heading id="legal-title" tag="h1" variant="h2">{page.title}</Heading>
+    <RichText maxWidth={70}>
+      <p>{page.text}</p>
+    </RichText>
+  </Section>
+</Layout>

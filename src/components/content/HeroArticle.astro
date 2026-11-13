@@ -1,0 +1,131 @@
+---
+import Breadcrumb from "@/components/global/Breadcrumb.astro";
+import { slotContent } from "@/utils/slots.ts";
+import type { ComponentProps } from "astro/types";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Trail from the home page to the current page. The last item is the current page. */
+  breadcrumb: ComponentProps<typeof Breadcrumb>["items"];
+  /** Short facts above the heading. The first one is emphasised. */
+  meta?: string[];
+  /** Text under the heading. */
+  lead?: string;
+  /** Show the author line. */
+  author?: boolean;
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  class?: string;
+}
+
+const {
+  render = true,
+  breadcrumb,
+  meta = [],
+  lead,
+  author = false,
+  id = "hero-article-title",
+  class: className,
+} = Astro.props;
+
+const title = await slotContent(Astro.slots);
+const aside = await slotContent(Astro.slots, "aside");
+---
+
+{render && title && (
+  <div class:list={["hero-article_wrap", aside && "has-aside", className]}>
+    <div class="hero-article_content">
+      <Breadcrumb items={breadcrumb} />
+      {meta.length > 0 && (
+        <p class="hero-article_meta">
+          {meta.map((item, index) => (index === 0 ? <b>{item}</b> : <span>{item}</span>))}
+        </p>
+      )}
+      <h1 id={id} class="hero-article_title"><Fragment set:html={title} /></h1>
+      {lead && <p class="hero-article_lead">{lead}</p>}
+      {author && (
+        <p class="hero-article_author">
+          <span class="hero-article_avatar" aria-hidden="true" />
+          <span><b>[Prénom Nom]</b>, fondateur d’Optevia</span>
+        </p>
+      )}
+    </div>
+    {aside && <div class="hero-article_aside"><Fragment set:html={aside} /></div>}
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .hero-article_wrap {
+      width: 100%;
+      &.has-aside {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr);
+        gap: 2rem clamp(2.5rem, 6vw, 6rem);
+        align-items: end;
+        @media (width < 60rem) {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    }
+
+    .hero-article_content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+      max-width: 62.5rem;
+    }
+
+    .hero-article_meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem 1.125rem;
+      font-size: 0.9375rem;
+      color: var(--text-3);
+      & b {
+        font-weight: var(--primary-medium);
+        color: var(--text);
+      }
+    }
+
+    .hero-article_title {
+      font-size: clamp(2.25rem, 4.6vw, 4rem);
+      font-weight: var(--primary-semibold);
+      line-height: 1.04;
+      letter-spacing: -0.034em;
+      & span,
+      & strong {
+        font-weight: inherit;
+        color: var(--coral-500);
+      }
+    }
+
+    .hero-article_lead {
+      max-width: 35rem;
+      font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+
+    .hero-article_author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9375rem;
+      color: var(--text-3);
+      & b {
+        color: var(--text);
+      }
+    }
+
+    .hero-article_avatar {
+      flex: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-round);
+      background-color: var(--background-3);
+    }
+  }
+</style>

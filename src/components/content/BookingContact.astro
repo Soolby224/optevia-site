@@ -2,6 +2,8 @@
 import Breadcrumb from "@/components/global/Breadcrumb.astro";
 import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Button from "@/components/Button.astro";
+import Icon from "@/components/media/Icon.astro";
+import checkmark from "@/assets/icons/ion/checkmark-outline.svg";
 
 const steps = [
   "Vous réservez un créneau.",
@@ -31,7 +33,7 @@ const weekdays = ["LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM"];
       ))}
     </ol>
     <ul class="booking-contact_trust">
-      {trust.map((item) => <li>{item}</li>)}
+      {trust.map((item) => <li><Icon src={checkmark} variant="small" />{item}</li>)}
     </ul>
   </div>
 
@@ -347,9 +349,12 @@ const weekdays = ["LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM"];
       gap: 0.5rem 1.25rem;
       font-size: 0.9375rem;
       font-weight: var(--primary-medium);
-      & li::before {
-        content: "✓";
-        margin-right: 0.375rem;
+      & li {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+      }
+      & svg {
         color: var(--coral-500);
       }
     }

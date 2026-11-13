@@ -1,0 +1,77 @@
+---
+import Button from "@/components/Button.astro";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  class?: string;
+}
+
+const { render = true, class: className } = Astro.props;
+---
+
+{render && (
+  <form class:list={["pdf-guide_wrap", className]} aria-labelledby="pdf-guide-title" data-pdf-guide>
+    <p id="pdf-guide-title" class="pdf-guide_title">Le recevoir en PDF</p>
+    <label for="pdf-guide-email" class="pdf-guide_label">Votre e-mail</label>
+    <input id="pdf-guide-email" class="pdf-guide_input" type="email" name="email" autocomplete="email" required />
+    <Button type="submit" arrow class="width-full margin-top-2">Recevoir le guide</Button>
+    <p class="pdf-guide_status" role="status" hidden>
+      [À brancher : l’envoi du guide en PDF n’est pas encore relié à un service d’e-mail.]
+    </p>
+  </form>
+)}
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("[data-pdf-guide]").forEach((form) => {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      form.querySelector<HTMLElement>(".pdf-guide_status")?.removeAttribute("hidden");
+    });
+  });
+</script>
+
+<style is:global>
+  @layer components {
+    .pdf-guide_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: clamp(1.375rem, 2.6vw, 2rem);
+      border-radius: var(--radius-main);
+      background-color: var(--background-2);
+    }
+
+    .pdf-guide_title {
+      margin-bottom: 0.375rem;
+      font-size: 1.25rem;
+      font-weight: var(--primary-semibold);
+      letter-spacing: -0.017em;
+    }
+
+    .pdf-guide_label {
+      font-size: 0.875rem;
+      font-weight: var(--primary-medium);
+    }
+
+    .pdf-guide_input {
+      min-height: 3.125rem;
+      padding: 0 0.875rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-button);
+      background-color: var(--background);
+      font: inherit;
+      font-size: 1rem;
+      &:focus-visible {
+        outline: var(--focus-width) solid var(--brand-500);
+        outline-offset: 0.0625rem;
+      }
+    }
+
+    .pdf-guide_status {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-2);
+    }
+  }
+</style>

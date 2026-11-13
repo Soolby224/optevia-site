@@ -1,0 +1,62 @@
+---
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Small label above the links. */
+  label: string;
+  /** Links shown as chips. */
+  links: { label: string; href: string }[];
+  class?: string;
+}
+
+const { render = true, label, links, class: className } = Astro.props;
+---
+
+{render && links.length > 0 && (
+  <nav class:list={["related-links_wrap", className]} aria-label={label}>
+    <p class="related-links_label">{label}</p>
+    <ul class="related-links_list">
+      {links.map((link) => (
+        <li><a class="related-links_link" href={link.href}>{link.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style is:global>
+  @layer components {
+    .related-links_wrap {
+      width: 100%;
+    }
+
+    .related-links_label {
+      font-size: 0.875rem;
+      font-weight: var(--primary-medium);
+      color: var(--text-3);
+    }
+
+    .related-links_list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .related-links_link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0.25rem 0.875rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-button);
+      background-color: var(--background);
+      font-size: 0.9375rem;
+      font-weight: var(--primary-medium);
+      color: var(--text);
+      transition: border-color var(--hover-duration) var(--hover-ease);
+      &:hover {
+        border-color: var(--text);
+      }
+    }
+  }
+</style>

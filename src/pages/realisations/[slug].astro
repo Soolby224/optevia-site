@@ -1,0 +1,85 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroArticle from "@/components/content/HeroArticle.astro";
+import ResultsCas from "@/components/content/ResultsCas.astro";
+import StoryCas from "@/components/content/StoryCas.astro";
+import NextCas from "@/components/content/NextCas.astro";
+import RelatedLinks from "@/components/content/RelatedLinks.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+import { CAS, casHref, casTitle, type Cas } from "@/data/cas.ts";
+import { getMetier, metierHref } from "@/data/metiers.ts";
+import { serviceName } from "@/data/services.ts";
+
+export function getStaticPaths() {
+  return CAS.map((cas, index) => ({
+    params: { slug: cas.slug },
+    props: { cas, next: CAS[(index + 1) % CAS.length] },
+  }));
+}
+
+interface Props {
+  cas: Cas;
+  next: Cas;
+}
+
+const { cas, next } = Astro.props;
+
+const metier = getMetier(cas.metier);
+
+const links = [
+  ...cas.services.map((slug) => ({ label: serviceName(slug), href: `/${slug}` })),
+  ...(metier ? [{ label: `Métier : ${metier.name}`, href: metierHref(metier.slug) }] : []),
+];
+
+const others = [
+  ...CAS.filter((other) => other.slug !== cas.slug).map((other) => ({
+    label: `${other.tag} : ${other.after}`,
+    href: casHref(other.slug),
+  })),
+  { label: "Toutes les réalisations", href: "/realisations" },
+];
+---
+
+<Layout type="article" title={casTitle(cas)} description={cas.description}>
+  <!-- En-tête -->
+  <Section aria-labelledby="hero-article-title" paddingTop="small" paddingBottom="small">
+    <HeroArticle
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Réalisations", href: "/realisations" },
+        { label: cas.client },
+      ]}
+      meta={[cas.tag]}
+    >
+      {cas.before}{" "}<span>{cas.client}</span>{" "}{cas.after}
+    </HeroArticle>
+  </Section>
+
+  <!-- Résultats -->
+  <Section aria-label="Résultats" paddingTop="none" paddingBottom="small">
+    <ResultsCas photo={cas.photo} kpis={cas.kpis} />
+  </Section>
+
+  <!-- Récit -->
+  <Section aria-label="Le projet" paddingTop="small">
+    <StoryCas story={cas.story} quote={cas.quote} links={links} />
+  </Section>
+
+  <!-- Autres cas -->
+  <Section aria-label="Autres études de cas" paddingTop="none">
+    <NextCas href={casHref(next.slug)} tag={next.tag} title={casTitle(next)} />
+    <RelatedLinks label="Les autres études de cas" links={others} />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand
+      text="L’audit gratuit vous donne votre point de départ : votre score sur 100."
+      secondary="whatsapp"
+      secondaryLabel="Ou sur WhatsApp"
+    >
+      Et pour<br /><strong>votre entreprise ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

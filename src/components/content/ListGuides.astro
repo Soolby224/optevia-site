@@ -1,45 +1,14 @@
 ---
 import Icon from "@/components/media/Icon.astro";
-import arrowRight from "@/assets/icons/arrow-right.svg";
+import arrowRight from "@/assets/icons/ion/arrow-forward-outline.svg";
 
-const guides = [
-  {
-    slug: "fiche-google",
-    title: "La fiche Google des artisans",
-    text: "Tout régler, de la catégorie aux photos, pour sortir en premier sur Maps.",
-    minutes: 20,
-  },
-  {
-    slug: "referencement-local",
-    title: "Être trouvé dans sa ville",
-    text: "Le référencement local, étape par étape : pages, mots, annuaires.",
-    minutes: 25,
-  },
-  {
-    slug: "ia",
-    title: "Être recommandé par les IA",
-    text: "Ce que regardent ChatGPT, Gemini et Perplexity, et comment y apparaître.",
-    minutes: 18,
-  },
-  {
-    slug: "avis-clients",
-    title: "Les avis clients",
-    text: "En obtenir plus, y répondre, gérer les mauvais sans s’énerver.",
-    minutes: 15,
-  },
-  {
-    slug: "site-internet",
-    title: "Le site qui fait appeler",
-    text: "Les pages, les photos et les boutons qui transforment une visite en appel.",
-    minutes: 22,
-  },
-];
+import { GUIDES, guideHref } from "@/data/guides.ts";
 ---
 
 <ol class="list-guides_wrap">
-  {guides.map((guide, index) => (
+  {GUIDES.map((guide, index) => (
     <li>
-      <a class="list-guides_item" href={`/guides/${guide.slug}`}>
+      <a class="list-guides_item" href={guideHref(guide.slug)}>
         <span class="list-guides_number">{String(index + 1).padStart(2, "0")}</span>
         <span class="list-guides_content">
           <strong>{guide.title}</strong>

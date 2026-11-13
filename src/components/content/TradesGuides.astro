@@ -1,15 +1,27 @@
 ---
 import Heading from "@/components/typography/Heading.astro";
 import { METIERS, metierHref } from "@/data/metiers.ts";
+
+interface Props {
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  /** Links listed beside the heading. Defaults to every trade page. */
+  links?: { label: string; href: string }[];
+}
+
+const {
+  id = "trades-guides-title",
+  links = METIERS.map((metier) => ({ label: metier.name, href: metierHref(metier.slug) })),
+} = Astro.props;
 ---
 
 <div class="trades-guides_wrap">
-  <Heading id="trades-guides-title" class="heading-accent">
-    Par métier.<br /><strong>Ce qui marche chez vous.</strong>
+  <Heading id={id} class="heading-accent">
+    <slot>Par métier.<br /><strong>Ce qui marche chez vous.</strong></slot>
   </Heading>
   <ul class="trades-guides_list">
-    {METIERS.map((metier) => (
-      <li><a href={metierHref(metier.slug)}>{metier.name}</a></li>
+    {links.map((link) => (
+      <li><a href={link.href}>{link.label}</a></li>
     ))}
   </ul>
 </div>

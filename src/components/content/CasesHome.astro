@@ -3,40 +3,9 @@ import PhotoSlot from "@/components/media/PhotoSlot.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Button from "@/components/Button.astro";
 import Icon from "@/components/media/Icon.astro";
-import arrowRight from "@/assets/icons/arrow-right.svg";
+import arrowRight from "@/assets/icons/ion/arrow-forward-outline.svg";
 
-const cases = [
-  {
-    tag: "Rénovation énergétique · [Ville]",
-    before: "Comment",
-    client: "[Nom du client]",
-    after: "est passé de la page 3 au top 3 de Google Maps",
-    from: "[XX]/100",
-    to: "[XX]/100",
-    metric: "Score de visibilité",
-    photo: "Pose de pompe à chaleur",
-  },
-  {
-    tag: "Plomberie · [Ville]",
-    before: "Comment",
-    client: "[Nom du client]",
-    after: "reçoit ses demandes de devis depuis sa fiche Google",
-    from: "[XX] appels/mois",
-    to: "[XX] appels/mois",
-    metric: "Appels depuis la fiche",
-    photo: "Plombier en intervention chez un client",
-  },
-  {
-    tag: "Électricité · [Ville]",
-    before: "Comment",
-    client: "[Nom du client]",
-    after: "est devenu recommandé par les IA dans sa ville",
-    from: "[XX]/100",
-    to: "[XX]/100",
-    metric: "Score de visibilité",
-    photo: "Électricien devant son camion",
-  },
-];
+import { CAS, casHref } from "@/data/cas.ts";
 
 interface Props {
   /** Id of the heading, referenced by the section's `aria-labelledby`. */
@@ -48,28 +17,32 @@ interface Props {
    * @int
    */
   limit?: number;
+  /** Show the heading and the link to every case study. */
+  head?: boolean;
 }
 
-const { id = "cases-home-title", limit = cases.length } = Astro.props;
+const { id = "cases-home-title", limit = CAS.length, head = true } = Astro.props;
 ---
 
 <div class="cases-home_wrap">
-  <div class="cases-home_head">
-    <Heading id={id} class="heading-accent">
-      Chaque projet,<br /><strong>se mesure à ses résultats.</strong>
-    </Heading>
-    <Button element="link" variant="link" href="/realisations" arrow>
-      Voir toutes les études de cas
-    </Button>
-  </div>
+  {head && (
+    <div class="cases-home_head">
+      <Heading id={id} class="heading-accent">
+        Chaque projet,<br /><strong>se mesure à ses résultats.</strong>
+      </Heading>
+      <Button element="link" variant="link" href="/realisations" arrow>
+        Voir toutes les études de cas
+      </Button>
+    </div>
+  )}
 
   <div class="cases-home_list">
-    {cases.slice(0, limit).map((item, index) => (
+    {CAS.slice(0, limit).map((item, index) => (
       <div class:list={["cases-home_row", index % 2 === 1 && "is-reversed"]}>
         <div class="cases-home_photo">
           <PhotoSlot alt={item.photo} radius="small" />
         </div>
-        <a href="/realisations" class="cases-home_card">
+        <a href={casHref(item.slug)} class="cases-home_card">
           <span class="cases-home_tag">{item.tag}</span>
           <h3 class="cases-home_title">
             {item.before} <span>{item.client}</span> {item.after}

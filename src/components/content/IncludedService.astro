@@ -3,7 +3,7 @@ interface Props {
   /** Set to `false` to omit the component. */
   render?: boolean;
   /** What the service includes, one row per part. */
-  items: { title: string; text: string; points: string[] }[];
+  items: { title: string; text: string; points: string[]; id?: string }[];
   class?: string;
 }
 
@@ -13,7 +13,7 @@ const { render = true, items, class: className } = Astro.props;
 {render && items.length > 0 && (
   <div class:list={["included-service_wrap", className]}>
     {items.map((item) => (
-      <article class="included-service_row">
+      <article class="included-service_row" id={item.id}>
         <div class="included-service_head">
           <h3 class="included-service_title">{item.title}</h3>
           <p class="included-service_text">{item.text}</p>
@@ -40,6 +40,7 @@ const { render = true, items, class: className } = Astro.props;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
       gap: 1.25rem clamp(2rem, 5vw, 5rem);
       padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+      scroll-margin-top: calc(var(--nav-height) + 1.5rem);
       border-bottom: var(--border-width) solid var(--border);
       @media (width < 56.25rem) {
         grid-template-columns: minmax(0, 1fr);

@@ -1,5 +1,7 @@
 ---
 import { SITE_URL } from "@/consts.ts";
+import Icon from "@/components/media/Icon.astro";
+import chevron from "@/assets/icons/ion/chevron-forward-outline.svg";
 
 interface Props {
   /** Set to `false` to omit the component. */
@@ -30,6 +32,7 @@ const schema = {
     <ol class="breadcrumb_list">
       {items.map((item, index) => (
         <li class="breadcrumb_item" aria-current={index === items.length - 1 ? "page" : undefined}>
+          {index > 0 && <Icon class="breadcrumb_separator" src={chevron} variant="small" />}
           {item.href && index < items.length - 1 ? (
             <a class="breadcrumb_link" href={item.href}>{item.label}</a>
           ) : (
@@ -65,9 +68,9 @@ const schema = {
         color: var(--text);
         font-weight: var(--primary-medium);
       }
-      & + &::before {
-        content: "/";
-        color: var(--border);
+      & .breadcrumb_separator {
+        --_size: 0.75em;
+        color: var(--text-3);
       }
     }
 

@@ -1,0 +1,39 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroPage from "@/components/content/HeroPage.astro";
+import CasesHome from "@/components/content/CasesHome.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+---
+
+<Layout
+  type="website"
+  title="Réalisations et études de cas"
+  description="Les études de cas Optevia : comment des artisans et entreprises de l’habitat sont remontés sur Google, Google Maps et dans les réponses des IA. Point de départ, actions, résultats."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small" paddingBottom="small">
+    <HeroPage
+      title="Études de cas : artisans et entreprises de l’habitat accompagnés par Optevia"
+      lead="Pour chaque client : le point de départ, ce qu’on a fait, et ce qui a changé. Les chiffres sont ceux du client."
+      breadcrumb={[{ label: "Accueil", href: "/" }, { label: "Réalisations" }]}
+    >
+      Nos réalisations.<br /><span>Des résultats mesurés.</span>
+    </HeroPage>
+  </Section>
+
+  <!-- Études de cas -->
+  <Section aria-label="Études de cas" paddingTop="none">
+    <CasesHome head={false} />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand
+      text="L’audit gratuit vous donne votre point de départ : votre score sur 100."
+      secondary="whatsapp"
+    >
+      Et pour<br /><strong>votre entreprise ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

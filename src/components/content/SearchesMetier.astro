@@ -1,0 +1,65 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Searches future clients type. */
+  searches: string[];
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  class?: string;
+}
+
+const {
+  render = true,
+  searches,
+  id = "searches-metier-title",
+  class: className,
+} = Astro.props;
+---
+
+{render && searches.length > 0 && (
+  <div class:list={["searches-metier_wrap", className]}>
+    <Heading id={id} class="heading-accent">
+      Ce que tapent<br /><strong>vos futurs clients.</strong>
+    </Heading>
+    <ul class="searches-metier_list">
+      {searches.map((search) => <li><q>{search}</q></li>)}
+    </ul>
+    <p class="searches-metier_note">
+      Si vous n’apparaissez pas sur ces recherches, l’appel part chez un concurrent.
+    </p>
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .searches-metier_wrap {
+      width: 100%;
+    }
+
+    .searches-metier_list {
+      margin-top: clamp(2.5rem, 5vw, 3.5rem);
+      border-top: 0.09375rem solid var(--text);
+      & li {
+        padding: clamp(1.125rem, 2vw, 1.625rem) 0;
+        border-bottom: var(--border-width) solid var(--border);
+      }
+      & q {
+        font-size: clamp(1.5rem, 3vw, 2.75rem);
+        font-weight: var(--primary-semibold);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        quotes: "« " " »";
+      }
+    }
+
+    .searches-metier_note {
+      margin-top: 1.5rem;
+      font-size: 1.0625rem;
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+  }
+</style>

@@ -6,6 +6,10 @@ import { isNoindexRoute } from "./src/utils/seo.ts";
 
 export default defineConfig({
   site: SITE_URL,
+  redirects: {
+    "/artisans": "/metiers",
+    "/entreprises": "/metiers",
+  },
   integrations: [
     sitemap({
       filter: (page) => !isNoindexRoute(new URL(page).pathname),

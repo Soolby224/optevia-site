@@ -1,0 +1,87 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Heading from "@/components/typography/Heading.astro";
+import HeroArticle from "@/components/content/HeroArticle.astro";
+import PdfGuide from "@/components/content/PdfGuide.astro";
+import BodyGuide from "@/components/content/BodyGuide.astro";
+import RelatedArticles from "@/components/content/RelatedArticles.astro";
+import RelatedLinks from "@/components/content/RelatedLinks.astro";
+import TradesGuides from "@/components/content/TradesGuides.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+import { GUIDES, guideHref, type Guide } from "@/data/guides.ts";
+import { ARTICLES, articleHref, themeLabel } from "@/data/articles.ts";
+import { serviceName } from "@/data/services.ts";
+
+export function getStaticPaths() {
+  return GUIDES.map((guide) => ({ params: { slug: guide.slug }, props: { guide } }));
+}
+
+interface Props {
+  guide: Guide;
+}
+
+const { guide } = Astro.props;
+
+const articles = ARTICLES.filter((article) => article.theme === guide.theme).map((article) => ({
+  href: articleHref(article.slug),
+  tag: themeLabel(article.theme),
+  meta: `${article.minutes} min`,
+  title: article.title,
+}));
+
+const links = [
+  { label: `Service : ${serviceName(guide.service)}`, href: `/${guide.service}` },
+  ...GUIDES.filter((other) => other.slug !== guide.slug).map((other) => ({
+    label: `Guide : ${other.title}`,
+    href: guideHref(other.slug),
+  })),
+  { label: "Tous les articles", href: "/blog" },
+];
+---
+
+<Layout type="article" title={guide.heading} description={`${guide.lead} Guide gratuit.`}>
+  <!-- En-tête -->
+  <Section aria-labelledby="hero-article-title" paddingTop="small" paddingBottom="small">
+    <HeroArticle
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Guides", href: "/guides" },
+        { label: guide.label },
+      ]}
+      meta={["Guide gratuit", `${guide.minutes} min de lecture`, "Mis à jour le [date]"]}
+      lead={guide.lead}
+    >
+      {guide.heading}
+      <PdfGuide slot="aside" />
+    </HeroArticle>
+  </Section>
+
+  <!-- Chapitres -->
+  <Section aria-label="Chapitres du guide" paddingTop="none">
+    <BodyGuide chapters={guide.chapters} />
+  </Section>
+
+  <!-- Articles liés -->
+  <Section aria-labelledby="related-articles-title" class="background-2">
+    <Heading id="related-articles-title">Les articles liés</Heading>
+    <RelatedArticles items={articles} />
+    <RelatedLinks label="Pour aller plus loin" links={links} />
+  </Section>
+
+  <!-- Par métier -->
+  <Section aria-labelledby="trades-guides-title">
+    <TradesGuides />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand
+      text="On s’en occupe. L’audit gratuit vous dit ce qui manque, et par où commencer."
+      secondary="whatsapp"
+      secondaryLabel="Ou sur WhatsApp"
+    >
+      Pas le temps<br /><strong>de tout régler ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

@@ -1,0 +1,164 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Button from "@/components/Button.astro";
+import ServiceHero from "@/components/content/ServiceHero.astro";
+import SectionHead from "@/components/content/SectionHead.astro";
+import SearchesMetier from "@/components/content/SearchesMetier.astro";
+import ServicesDuo from "@/components/content/ServicesDuo.astro";
+import FaqHome from "@/components/content/FaqHome.astro";
+import RelatedArticles from "@/components/content/RelatedArticles.astro";
+import RelatedLinks from "@/components/content/RelatedLinks.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+import { SITE_NAME, SITE_URL } from "@/consts.ts";
+import { METIERS, getMetier, metierHref, type Metier } from "@/data/metiers.ts";
+import { ARTICLES, articleHref, themeLabel } from "@/data/articles.ts";
+import { getGuide, guideHref } from "@/data/guides.ts";
+import { MAIN_ZONE, zoneHref } from "@/data/zones.ts";
+
+export function getStaticPaths() {
+  return METIERS.map((metier) => ({ params: { slug: metier.slug }, props: { metier } }));
+}
+
+interface Props {
+  metier: Metier;
+}
+
+const { metier } = Astro.props;
+
+const title = `Site internet et référencement local pour ${metier.audience}`;
+const guide = getGuide(metier.guide);
+
+const resources = [
+  ...(guide
+    ? [{ href: guideHref(guide.slug), tag: "Guide gratuit", meta: `${guide.minutes} min`, title: guide.title }]
+    : []),
+  ...ARTICLES.filter((article) => metier.themes.includes(article.theme))
+    .slice(0, 2)
+    .map((article) => ({
+      href: articleHref(article.slug),
+      tag: themeLabel(article.theme),
+      meta: `${article.minutes} min`,
+      title: article.title,
+    })),
+];
+
+const related = metier.related.flatMap((slug) => {
+  const other = getMetier(slug);
+  return other ? [{ label: other.name, href: metierHref(other.slug) }] : [];
+});
+
+const faq = [
+  {
+    question: `Travaillez-vous déjà avec des ${metier.audience} de ma ville ?`,
+    answer: "[À valider : règle d’exclusivité par métier et par ville.]",
+  },
+  {
+    question: "Je n’ai pas le temps de m’en occuper.",
+    answer:
+      "C’est le principe : on fait le travail, vous validez et vous répondez au téléphone. L’audit prend vingt minutes.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: title,
+  provider: { "@type": "ProfessionalService", name: SITE_NAME, url: SITE_URL },
+  audience: { "@type": "BusinessAudience", name: metier.audience },
+  areaServed: "Île-de-France",
+  offers: [
+    { "@type": "Offer", name: "Site internet", price: "597", priceCurrency: "EUR" },
+    {
+      "@type": "Offer",
+      name: "Visibilité Google et IA",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: "60",
+        priceCurrency: "EUR",
+        unitText: "MONTH",
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  type="website"
+  title={title}
+  description={`Optevia aide les ${metier.audience} à sortir en tête sur Google, Google Maps et dans les IA, dans leur ville. Site dès 597 €, visibilité dès 60 €/mois. Audit gratuit.`}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <!-- Héro -->
+  <Section aria-labelledby="service-hero-title" paddingTop="small">
+    <ServiceHero
+      title={title}
+      text={`Quand un client cherche ${metier.singular} dans votre ville, il appelle l’un des trois premiers. Optevia vous y emmène : site internet, fiche Google et visibilité dans les IA.`}
+      photo={metier.photo}
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Métiers", href: "/metiers" },
+        { label: metier.name },
+      ]}
+    >
+      {metier.hook}<br /><span>soyez celui qu’on appelle.</span>
+      <Button slot="actions" element="link" href="/contact" arrow>
+        Audit gratuit pour les {metier.audience}
+      </Button>
+    </ServiceHero>
+  </Section>
+
+  <!-- Recherches -->
+  <Section aria-labelledby="searches-metier-title" class="background-2">
+    <SearchesMetier searches={metier.searches} />
+  </Section>
+
+  <!-- Les deux services -->
+  <Section aria-labelledby="services-duo-title">
+    <ServicesDuo>
+      Ce qu’on fait<br /><strong>pour les {metier.audience}.</strong>
+    </ServicesDuo>
+  </Section>
+
+  <!-- Questions et métiers proches -->
+  <Section aria-labelledby="faq-metier-title" class="background-2">
+    <FaqHome
+      items={faq}
+      id="faq-metier-title"
+      eyebrow=""
+      lead=""
+      ctaLabel="Toutes les questions"
+      ctaHref="/faq"
+      schema={false}
+    >
+      Deux questions<br /><strong>qu’on nous pose.</strong>
+    </FaqHome>
+    <RelatedLinks
+      label="Métiers proches"
+      links={[...related, { label: "Tous les métiers", href: "/metiers" }]}
+    />
+    <RelatedLinks
+      label="Zones d’intervention"
+      links={[
+        { label: `${metier.name} ${MAIN_ZONE.where}`, href: zoneHref(MAIN_ZONE.slug) },
+        { label: "Toutes les zones", href: "/zones" },
+      ]}
+    />
+  </Section>
+
+  <!-- Guide et articles -->
+  <Section aria-labelledby="resources-metier-title">
+    <SectionHead id="resources-metier-title" text="Le guide et les articles les plus utiles pour votre métier.">
+      Pour aller plus loin,<br /><strong>à votre rythme.</strong>
+    </SectionHead>
+    <RelatedArticles items={resources} />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand secondary="phone">
+      {metier.hook}<br /><strong>combien d’appels vous échappent ?</strong>
+    </CtaBand>
+  </Section>
+</Layout>

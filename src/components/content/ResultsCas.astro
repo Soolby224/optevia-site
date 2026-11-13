@@ -1,0 +1,79 @@
+---
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Description of the photo. */
+  photo: string;
+  /** Results, before and after. */
+  kpis: { label: string; from: string; to: string }[];
+  class?: string;
+}
+
+const { render = true, photo, kpis, class: className } = Astro.props;
+---
+
+{render && (
+  <div class:list={["results-cas_wrap", className]}>
+    <PhotoSlot alt={photo} radius="main" ratio="wide" eager />
+    <dl class="results-cas_list">
+      {kpis.map((kpi) => (
+        <div class="results-cas_item">
+          <dt>{kpi.label}</dt>
+          <dd>
+            <s>{kpi.from}</s> {kpi.to}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .results-cas_wrap {
+      width: 100%;
+    }
+
+    .results-cas_list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: var(--border-width) solid var(--border);
+      @media (width < 48rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .results-cas_item {
+      padding: 1.75rem 1.5rem 1.75rem 0;
+      & + & {
+        padding-left: 1.5rem;
+        border-left: var(--border-width) solid var(--border);
+        @media (width < 48rem) {
+          padding-left: 0;
+          border-left: 0;
+          border-top: var(--border-width) solid var(--border);
+        }
+      }
+      & dt {
+        margin-bottom: 0.5rem;
+        font-size: 0.9375rem;
+        color: var(--text-3);
+      }
+      & dd {
+        font-size: clamp(2rem, 3.6vw, 3.25rem);
+        font-weight: var(--primary-semibold);
+        line-height: 1;
+        letter-spacing: -0.043em;
+      }
+      & s {
+        margin-right: 0.375rem;
+        font-size: 0.5em;
+        font-weight: var(--primary-medium);
+        letter-spacing: 0;
+        color: var(--text-3);
+      }
+    }
+  }
+</style>

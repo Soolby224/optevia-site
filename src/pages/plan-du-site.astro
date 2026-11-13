@@ -1,0 +1,90 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Breadcrumb from "@/components/global/Breadcrumb.astro";
+import Heading from "@/components/typography/Heading.astro";
+import RichText from "@/components/typography/RichText.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import { METIERS, metierHref } from "@/data/metiers.ts";
+import { ZONES, zoneHref } from "@/data/zones.ts";
+import { GUIDES, guideHref } from "@/data/guides.ts";
+import { ARTICLES, articleHref } from "@/data/articles.ts";
+import { CAS, casHref, casTitle } from "@/data/cas.ts";
+import { LEGAL_PAGES } from "@/data/legal.ts";
+
+const groups = [
+  {
+    title: "Optevia",
+    links: [
+      { label: "Accueil", href: "/" },
+      { label: "Être choisi", href: "/etre-choisi" },
+      { label: "Gagner du temps et e‑réputation", href: "/gagner-du-temps" },
+      { label: "Tarifs", href: "/tarifs" },
+      { label: "À propos", href: "/a-propos" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Contact et audit gratuit", href: "/contact" },
+    ],
+  },
+  {
+    title: "Métiers",
+    links: [
+      { label: "Tous les métiers", href: "/metiers" },
+      ...METIERS.map((metier) => ({ label: metier.name, href: metierHref(metier.slug) })),
+    ],
+  },
+  {
+    title: "Zones",
+    links: [
+      { label: "Toutes les zones", href: "/zones" },
+      ...ZONES.map((zone) => ({ label: zone.name, href: zoneHref(zone.slug) })),
+    ],
+  },
+  {
+    title: "Guides",
+    links: [
+      { label: "Tous les guides", href: "/guides" },
+      ...GUIDES.map((guide) => ({ label: guide.title, href: guideHref(guide.slug) })),
+    ],
+  },
+  {
+    title: "Blog",
+    links: [
+      { label: "Tous les articles", href: "/blog" },
+      ...ARTICLES.map((article) => ({ label: article.title, href: articleHref(article.slug) })),
+    ],
+  },
+  {
+    title: "Réalisations",
+    links: [
+      { label: "Toutes les réalisations", href: "/realisations" },
+      ...CAS.map((cas) => ({ label: `${cas.tag} : ${casTitle(cas)}`, href: casHref(cas.slug) })),
+    ],
+  },
+  {
+    title: "Informations légales",
+    links: LEGAL_PAGES.map((page) => ({ label: page.title, href: `/${page.slug}` })),
+  },
+];
+---
+
+<Layout
+  type="website"
+  title="Plan du site"
+  description="Toutes les pages du site Optevia : services, tarifs, métiers, zones, guides, articles et études de cas."
+>
+  <!-- Plan du site -->
+  <Section aria-labelledby="sitemap-title" paddingTop="small" gap="6">
+    <Breadcrumb items={[{ label: "Accueil", href: "/" }, { label: "Plan du site" }]} />
+    <Heading id="sitemap-title" tag="h1" variant="h2">Plan du site</Heading>
+    <Grid medium={2} large={3}>
+      {groups.map((group) => (
+        <RichText>
+          <h2 class="text-style-h5">{group.title}</h2>
+          <ul>
+            {group.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+          </ul>
+        </RichText>
+      ))}
+    </Grid>
+  </Section>
+</Layout>

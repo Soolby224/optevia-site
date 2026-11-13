@@ -1,0 +1,50 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import HeroPage from "@/components/content/HeroPage.astro";
+import TradesGuides from "@/components/content/TradesGuides.astro";
+import ServicesDuo from "@/components/content/ServicesDuo.astro";
+import CtaBand from "@/components/content/CtaBand.astro";
+import { ZONES, zoneHref } from "@/data/zones.ts";
+
+const zones = ZONES.map((zone) => ({ label: `${zone.name} (${zone.code})`, href: zoneHref(zone.slug) }));
+---
+
+<Layout
+  type="website"
+  title="Zones d’intervention en Île-de-France"
+  description="Optevia accompagne les artisans et entreprises de l’habitat à Paris et dans toute l’Île-de-France : Hauts-de-Seine, Seine-Saint-Denis, Val-de-Marne, Yvelines, Essonne, Val-d’Oise, Seine-et-Marne."
+>
+  <!-- Héro -->
+  <Section aria-labelledby="hero-page-title" paddingTop="small" paddingBottom="small">
+    <HeroPage
+      title="Site internet et référencement local pour artisans à Paris et en Île-de-France"
+      lead="[À compléter : la zone d’intervention d’Optevia et la façon de travailler à distance ou sur place.]"
+      breadcrumb={[{ label: "Accueil", href: "/" }, { label: "Zones" }]}
+    >
+      Paris et l’Île-de-France.<br /><span>Votre ville d’abord.</span>
+    </HeroPage>
+  </Section>
+
+  <!-- Liste des zones -->
+  <Section aria-labelledby="zones-title" class="background-2">
+    <TradesGuides id="zones-title" links={zones}>
+      Huit départements.<br /><strong>Choisissez le vôtre.</strong>
+    </TradesGuides>
+  </Section>
+
+  <!-- Par métier -->
+  <Section aria-labelledby="trades-guides-title">
+    <TradesGuides />
+  </Section>
+
+  <!-- Les deux services -->
+  <Section aria-labelledby="services-duo-title" paddingTop="none">
+    <ServicesDuo />
+  </Section>
+
+  <!-- Audit gratuit -->
+  <Section aria-labelledby="cta-band-title" paddingTop="none">
+    <CtaBand secondary="phone" />
+  </Section>
+</Layout>

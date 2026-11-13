@@ -1,0 +1,81 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Heading from "@/components/typography/Heading.astro";
+import PhotoSlot from "@/components/media/PhotoSlot.astro";
+import HeroArticle from "@/components/content/HeroArticle.astro";
+import BodyArticle from "@/components/content/BodyArticle.astro";
+import RelatedArticles from "@/components/content/RelatedArticles.astro";
+import RelatedLinks from "@/components/content/RelatedLinks.astro";
+import {
+  ARTICLES,
+  PLACEHOLDER_SECTIONS,
+  articleHref,
+  getTheme,
+  relatedArticles,
+  themeLabel,
+  type Article,
+} from "@/data/articles.ts";
+import { getGuide, guideHref } from "@/data/guides.ts";
+import { getMetier, metierHref } from "@/data/metiers.ts";
+import { serviceName } from "@/data/services.ts";
+
+export function getStaticPaths() {
+  return ARTICLES.map((article) => ({ params: { slug: article.slug }, props: { article } }));
+}
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+
+const theme = getTheme(article.theme);
+const guide = theme?.guide ? getGuide(theme.guide) : undefined;
+const metier = article.metier ? getMetier(article.metier) : undefined;
+
+const links = [
+  ...(guide ? [{ label: `Guide : ${guide.title}`, href: guideHref(guide.slug) }] : []),
+  ...(theme ? [{ label: `Service : ${serviceName(theme.service)}`, href: `/${theme.service}` }] : []),
+  ...(metier ? [{ label: `Métier : ${metier.name}`, href: metierHref(metier.slug) }] : []),
+  { label: "Tous les articles", href: "/blog" },
+];
+
+const next = relatedArticles(article).map((other) => ({
+  href: articleHref(other.slug),
+  tag: themeLabel(other.theme),
+  meta: `${other.minutes} min`,
+  title: other.title,
+}));
+---
+
+<Layout type="article" title={article.title} description={article.lead}>
+  <!-- En-tête -->
+  <Section aria-labelledby="hero-article-title" paddingTop="small" paddingBottom="small">
+    <HeroArticle
+      breadcrumb={[
+        { label: "Accueil", href: "/" },
+        { label: "Blog", href: "/blog" },
+        { label: themeLabel(article.theme) },
+      ]}
+      meta={[themeLabel(article.theme), `${article.minutes} min de lecture`, "Mis à jour le [date]"]}
+      lead={article.lead ?? "[À rédiger : le chapeau de l’article.]"}
+      author
+    >
+      {article.title}
+    </HeroArticle>
+    <PhotoSlot alt={`Image de l’article : ${article.title}`} radius="main" ratio="wide" eager />
+  </Section>
+
+  <!-- Corps de l’article -->
+  <Section aria-label="Article" paddingTop="small">
+    <BodyArticle sections={article.sections ?? PLACEHOLDER_SECTIONS} summary={article.summary} />
+    <RelatedLinks label="Sur le même sujet" links={links} />
+  </Section>
+
+  <!-- À lire aussi -->
+  <Section aria-labelledby="related-articles-title" class="background-2">
+    <Heading id="related-articles-title">À lire aussi</Heading>
+    <RelatedArticles items={next} />
+  </Section>
+</Layout>

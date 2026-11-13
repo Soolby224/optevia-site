@@ -8,7 +8,16 @@ export const SITE_URL = "https://optevia.fr";
 /** BCP 47 locale tag used to format dates and numbers. */
 export const SITE_LOCALE = "fr-FR";
 /** Routes excluded from search and the sitemap. Surrounding slashes are ignored. */
-export const NOINDEX_ROUTES: string[] = ["/404"];
+export const NOINDEX_ROUTES: string[] = [
+  "/404",
+  "/style-guide",
+  "/example-components",
+  "/mentions-legales",
+  "/cgv",
+  "/confidentialite",
+  "/cookies",
+  "/accessibilite",
+];
 
 /** Contact links. Replace the placeholders with the real numbers. */
 export const CONTACT = {
@@ -22,8 +31,8 @@ export const CONTACT = {
 export const NAV_LINKS = [
   { label: "Services", href: "/#services" },
   { label: "Tarifs", href: "/tarifs" },
-  { label: "Réalisations", href: "/#realisations" },
+  { label: "Réalisations", href: "/realisations" },
   { label: "Métiers", href: "/metiers" },
-  { label: "Ressources", href: "/#ressources" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Ressources", href: "/guides" },
+  { label: "FAQ", href: "/faq" },
 ];

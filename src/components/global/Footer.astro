@@ -20,7 +20,7 @@ const columns = [
       { label: "Sortir en premier dans sa ville", href: "/etre-choisi#local" },
       { label: "Être conseillé par les IA", href: "/etre-choisi#ia" },
       { label: "Gagner du temps et e‑réputation", href: "/gagner-du-temps" },
-      { label: "Avis clients", href: "/gagner-du-temps#avis" },
+      { label: "Avis clients", href: "/gagner-du-temps#automatisations" },
     ],
   },
   {
@@ -33,6 +33,7 @@ const columns = [
       { label: "Menuisier", href: "/metiers/menuisier" },
       { label: "Couvreur", href: "/metiers/couvreur" },
       { label: "Chauffagiste", href: "/metiers/chauffagiste" },
+      { label: "Tous les métiers", href: "/metiers" },
     ],
   },
   {
@@ -62,7 +63,7 @@ const columns = [
     title: "Optevia",
     links: [
       { label: "Tarifs", href: "/tarifs" },
-      { label: "Réalisations", href: "/#realisations" },
+      { label: "Réalisations", href: "/realisations" },
       { label: "À propos", href: "/a-propos" },
       { label: "Contact", href: "/contact" },
       { label: "Audit gratuit", href: "/contact" },
@@ -79,11 +80,7 @@ const legal = [
   { label: "Plan du site", href: "/plan-du-site" },
 ];
 
-const socials = [
-  { label: "LinkedIn", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "Facebook", href: "#" },
-];
+const socials = ["LinkedIn", "Instagram", "Facebook"];
 ---
 
 {render && (
@@ -131,9 +128,7 @@ const socials = [
         <div class="footer_socials">
           <span>Suivre Optevia :</span>
           {socials.map((link) => (
-            <a class="footer_social" href={link.href}>
-              {link.label}
-            </a>
+            <span class="footer_social">{link}</span>
           ))}
         </div>
       </div>

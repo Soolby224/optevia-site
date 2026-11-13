@@ -1,0 +1,117 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
+import Icon from "@/components/media/Icon.astro";
+import arrowForward from "@/assets/icons/ion/arrow-forward-outline.svg";
+import { SERVICES } from "@/data/services.ts";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Id of the heading, referenced by the section's `aria-labelledby`. */
+  id?: string;
+  class?: string;
+}
+
+const { render = true, id = "services-duo-title", class: className } = Astro.props;
+---
+
+{render && (
+  <div class:list={["services-duo_wrap", className]}>
+    <div class="services-duo_head">
+      <Heading id={id} class="heading-accent">
+        <slot>Ce qu’on fait<br /><strong>pour vous.</strong></slot>
+      </Heading>
+      <Button element="link" variant="link" href="/tarifs" arrow>Voir tous les tarifs</Button>
+    </div>
+    <div class="services-duo_list">
+      {SERVICES.map((service, index) => (
+        <a class:list={["services-duo_card", index === 1 && "theme-dark"]} href={`/${service.slug}`}>
+          <h3 class="services-duo_title">{service.name}</h3>
+          <p class="services-duo_text">{service.text}</p>
+          <p class="services-duo_price">{service.price}</p>
+          <span class="services-duo_more">
+            Découvrir
+            <Icon src={arrowForward} variant="small" />
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .services-duo_wrap {
+      width: 100%;
+    }
+
+    .services-duo_head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.25rem 3rem;
+    }
+
+    .services-duo_list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: clamp(2.5rem, 5vw, 3.5rem);
+      @media (width < 56.25rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .services-duo_card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      padding: clamp(1.75rem, 3.2vw, 2.5rem);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-small);
+      background-color: var(--background);
+      color: var(--text);
+      transition: border-color var(--hover-duration) var(--hover-ease);
+      &.theme-dark .services-duo_price {
+        color: var(--brand-500);
+      }
+      &:hover {
+        border-color: var(--text);
+        & .services-duo_more svg {
+          transform: translateX(0.25rem);
+        }
+      }
+    }
+
+    .services-duo_title {
+      font-size: clamp(1.5rem, 2.4vw, 2rem);
+      font-weight: var(--primary-semibold);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+    }
+
+    .services-duo_text {
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+
+    .services-duo_price {
+      font-size: 0.9375rem;
+      font-weight: var(--primary-medium);
+    }
+
+    .services-duo_more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      min-height: 2.75rem;
+      margin-top: auto;
+      font-weight: var(--primary-semibold);
+      & svg {
+        transition: transform var(--hover-duration) var(--hover-ease);
+      }
+    }
+  }
+</style>
